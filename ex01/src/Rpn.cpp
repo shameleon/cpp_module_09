@@ -18,14 +18,9 @@ RPN::RPN(void)
 	return ;
 }
 
-RPN::RPN(std::string &input_operation):_input(input_operation),_operands(0), _operators(0)
+RPN::RPN(std::string &input_operation):_input(input_operation)
 {
 	this->_mstack = new std::stack<int>;
-	this->parseInput();
-	if (this->_stack.size() == 1)
-		std::cout << this->_stack.top() << std::endl;
-	else
-		throw (RPN::RPNErrorException());
 	return ;
 }
 
@@ -42,7 +37,7 @@ RPN::~RPN(void)
 	return ;
 }
 
-RPN				&RPN::operator=(RPN &rhs)
+RPN					&RPN::operator=(RPN &rhs)
 {
 	(static_cast< void >(rhs));
 	return *this;
@@ -50,106 +45,81 @@ RPN				&RPN::operator=(RPN &rhs)
 
 int					RPN::whichInputChar(char &c)
 {
-	if (c = ' ');
+	if (c == ' ')
 		return IS_SPACER;
 	else if (isdigit(c))
 		return IS_DIGIT;
 	else if (c == '*' || c == '/' || c == '+' || c == '-')
-		return IS_OPERATOR
+		return IS_OPERATOR;
 	return IS_INVALID;
 }
 
-void				RPN::popTwo_calculate_push(char c)
+void				RPN::popTwo_calculate_push(char &c)
 {
-	if (this->_stack.size() < 2)
+	if (this->_mstack->size() < 2)
 		throw (RPN::RPNErrorException());
-	int 	operand1 = this->_mstack.top();
-	this->_mstack.pop();
-	int 	operand2 = this->_mstack.top();
-	this->_mstack.pop();
-	switch (c)
+	int 	operand1 = this->_mstack->top();
+	this->_mstack->pop();
+	int 	operand2 = this->_mstack->top();
+	this->_mstack->pop();
+	switch (static_cast< int >(c))
 	{
 	case MULTIPLY:
-		operand1 *= operand2;
+		operand2 *= operand1;
 		break;
 	case ADD:
-		operand1 += operand2;
+		operand2 += operand1;
 		break;
 	case SUBSTRACT:
-		operand1 -= operand2;
+		operand2 -= operand1;
 		break;
 	case DIVIDE:
-		if (operand2)
-			operand1 /= operand2;
+		if (operand1)
+			operand2 /= operand1;
 		else
 			throw (RPN::RPNErrorException());
 		break;
 	default:
 		break;
 	}
-	this->_mstack.push(operand1);
+	this->_mstack->push(operand2);
 	return ;
 }
 
-void				RPN::popTwo_calculate_push(char c)
-{
-	if (this->_stack.size() < 2)
-		throw (RPN::RPNErrorException());
-	int 	operand1 = this->_mstack.top();
-	this->_mstack.pop();
-	int 	operand2 = this->_mstack.top();
-	this->_mstack.pop();
-	switch (c)
-	{
-	case MULTIPLY:
-		operand1 *= operand2;
-		break;
-	case ADD:
-		operand1 += operand2;
-		break;
-	case SUBSTRACT:
-		operand1 -= operand2;
-		break;
-	case DIVIDE:
-		if (operand2)
-			operand1 /= operand2;
-		else
-			throw (RPN::RPNErrorException());
-		break;
-	default:
-		break;
-	}
-	this->_mstack.push(operand1);
-	return ;
-}
-
-void				RPN::parseInput(void)
+/* parses input string :
+digit is pushed to stack
+operator token => pop two calculate the push result
+ */
+void				RPN::calculator(void)
 {
 	bool	can_be_pushed = true;
 
 	for (unsigned long i = 0; i < this->_input.size(); i++)
 	{
-		std::cout << "T" << whichInputChar(this->_input[i]) << " ";
 		switch (whichInputChar(this->_input[i]))
 		{
 		case IS_SPACER:
 			can_be_pushed = true;
-			break,
+			break;
 		case IS_DIGIT:
 			if (can_be_pushed)
-				this->_mstack->push(atoi(this->_input[i]));	// ref
+				this->_mstack->push((this->_input[i]) - '0');
 			else
 				throw (RPN::RPNErrorException());
 			can_be_pushed = false;
 			break;
-		case IS_OPERATOR;
-			popTwo_calculate_push(this->_input[i]));
+		case IS_OPERATOR:
+			this->popTwo_calculate_push(this->_input[i]);
 			break;
 		default:
 			throw (RPN::RPNErrorException());
 			break;
 		}
 	}
+	if (this->_mstack->size() == 1)
+		std::cout << COL_BGRN << this->_mstack->top() << COL_RES << std::endl;
+	else
+		throw (RPN::RPNErrorException());
 	return ;
 }
 
@@ -157,6 +127,5 @@ const char				*RPN::RPNErrorException::what(void) const throw()
 {
 	return ("Error");
 }
-
 
 

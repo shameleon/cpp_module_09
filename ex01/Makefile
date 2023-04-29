@@ -15,7 +15,7 @@ NAME		= RPN
 
 ###### sources ######	
 SRC_FILES	= \
-				Rpn.cpp \
+				RPN.cpp \
 				main.cpp \
 
 ###### directories ######	

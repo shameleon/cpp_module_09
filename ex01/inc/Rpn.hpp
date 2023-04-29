@@ -15,19 +15,9 @@
 
 /* class Span */
 # include <iostream>
-# include <deque>
-# include <iterator>			// std::iterator    std::distance
-# include <algorithm>			// std::min_element std::max_element 
-								// std::copy        std::sort
-								// for_each
+# include <stack>
 # include <stdexcept>			// std::except
-
-/* main.cpp */
 # include "colors.hpp"
-# include <list>				//std::list<>
-# include <iomanip>				// std::setw()
-# include <cstdlib>				// std::rand()
-# include <ctime>				// srand (time(NULL))
 
 enum	e_which_char
 {
@@ -39,10 +29,10 @@ enum	e_which_char
 
 enum	e_operation
 {
-	MULTIPLY = 52,
-	ADD = 53,
-	SUBSTRACT = 55,
-	DIVIDE = 57,
+	MULTIPLY = 42,
+	ADD = 43,
+	SUBSTRACT = 45,
+	DIVIDE = 47,
 };
 
 class RPN
@@ -50,21 +40,19 @@ class RPN
 	private:
 		std::stack<int>			*_mstack;
 		std::string				_input;
-		unsigned int			_operands;
-		unsigned int			_operators;
 
 		RPN(void);
 		RPN(RPN &other);
 		RPN						&operator=(RPN &rhs);
 
 		int						whichInputChar(char &c);
-		void					popTwo_calculate_push(char c);
+		void					popTwo_calculate_push(char &c);
 
 	public:
 		RPN(std::string &input_operation);
 		~RPN(void);
 
-		void					parseInput(void);
+		void					calculator(void);
 
 		class		RPNErrorException : public std::exception
 		{
