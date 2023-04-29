@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Rpn.cpp                                            :+:      :+:    :+:   */
+/*   RPN.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmouaike <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,96 +10,153 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Rpn.hpp"
+#include "../inc/RPN.hpp"
 
-Rpn::Rpn(void)
+RPN::RPN(void)
 {
-	throw (Rpn::RpnErrorException());
+	throw (RPN::RPNErrorException());
 	return ;
 }
 
-Rpn::Rpn(std::string &input_operation):_input(input_operation),_operands(0), _operators(0)
+RPN::RPN(std::string &input_operation):_input(input_operation),_operands(0), _operators(0)
 {
-	this->_mdeq = new std::deque<char>;
+	this->_mstack = new std::stack<int>;
 	this->parseInput();
-	this->validOperation();
-	this->printStack();
+	if (this->_stack.size() == 1)
+		std::cout << this->_stack.top() << std::endl;
+	else
+		throw (RPN::RPNErrorException());
 	return ;
 }
 
-Rpn::Rpn(Rpn &other)
+RPN::RPN(RPN &other)
 {
 	*this = other;
 	return ;
 }
 
-Rpn::~Rpn(void)
+RPN::~RPN(void)
 {
-	if (this->_mdeq)
-		delete this->_mdeq;
+	if (this->_mstack)
+		delete this->_mstack;
 	return ;
 }
 
-Rpn				&Rpn::operator=(Rpn &rhs)
+RPN				&RPN::operator=(RPN &rhs)
 {
 	(static_cast< void >(rhs));
 	return *this;
 }
 
-void				Rpn::parseInput(void)
+int					RPN::whichInputChar(char &c)
 {
-	bool	be_pushed = true;
+	if (c = ' ');
+		return IS_SPACER;
+	else if (isdigit(c))
+		return IS_DIGIT;
+	else if (c == '*' || c == '/' || c == '+' || c == '-')
+		return IS_OPERATOR
+	return IS_INVALID;
+}
 
-	for (unsigned long i = 0; i < _input.size(); i++)
+void				RPN::popTwo_calculate_push(char c)
+{
+	if (this->_stack.size() < 2)
+		throw (RPN::RPNErrorException());
+	int 	operand1 = this->_mstack.top();
+	this->_mstack.pop();
+	int 	operand2 = this->_mstack.top();
+	this->_mstack.pop();
+	switch (c)
 	{
-		if (be_pushed && (isdigit(_input[i]) || is_operation(_input[i])))
-		{
-			this->_mdeq->push_back(_input[i]);
-			be_pushed = false;
-		}
-		else if (_input[i] == ' ')
-			be_pushed = true;
+	case MULTIPLY:
+		operand1 *= operand2;
+		break;
+	case ADD:
+		operand1 += operand2;
+		break;
+	case SUBSTRACT:
+		operand1 -= operand2;
+		break;
+	case DIVIDE:
+		if (operand2)
+			operand1 /= operand2;
 		else
-			throw (Rpn::RpnErrorException());
+			throw (RPN::RPNErrorException());
+		break;
+	default:
+		break;
+	}
+	this->_mstack.push(operand1);
+	return ;
+}
+
+void				RPN::popTwo_calculate_push(char c)
+{
+	if (this->_stack.size() < 2)
+		throw (RPN::RPNErrorException());
+	int 	operand1 = this->_mstack.top();
+	this->_mstack.pop();
+	int 	operand2 = this->_mstack.top();
+	this->_mstack.pop();
+	switch (c)
+	{
+	case MULTIPLY:
+		operand1 *= operand2;
+		break;
+	case ADD:
+		operand1 += operand2;
+		break;
+	case SUBSTRACT:
+		operand1 -= operand2;
+		break;
+	case DIVIDE:
+		if (operand2)
+			operand1 /= operand2;
+		else
+			throw (RPN::RPNErrorException());
+		break;
+	default:
+		break;
+	}
+	this->_mstack.push(operand1);
+	return ;
+}
+
+void				RPN::parseInput(void)
+{
+	bool	can_be_pushed = true;
+
+	for (unsigned long i = 0; i < this->_input.size(); i++)
+	{
+		std::cout << "T" << whichInputChar(this->_input[i]) << " ";
+		switch (whichInputChar(this->_input[i]))
+		{
+		case IS_SPACER:
+			can_be_pushed = true;
+			break,
+		case IS_DIGIT:
+			if (can_be_pushed)
+				this->_mstack->push(atoi(this->_input[i]));	// ref
+			else
+				throw (RPN::RPNErrorException());
+			can_be_pushed = false;
+			break;
+		case IS_OPERATOR;
+			popTwo_calculate_push(this->_input[i]));
+			break;
+		default:
+			throw (RPN::RPNErrorException());
+			break;
+		}
 	}
 	return ;
 }
 
-void				Rpn::validOperation(void)
-{
-	if (this->_operands + 1 != this ->_operators)
-		throw (Rpn::RpnErrorException());
-	return ;
-}
-
-int				Rpn::calculator(void)
-{
-
-	return 12345;
-}
-
-void					Rpn::printStack(void) const
-{
-	for (std::deque< char >::iterator it = this->_mdeq->begin();
-		 it != this->_mdeq->end(); ++it )
-		std::cout << *it << std::endl;
-}
-
-const char				*Rpn::RpnErrorException::what(void) const throw()
+const char				*RPN::RPNErrorException::what(void) const throw()
 {
 	return ("Error");
 }
 
-
-std::ostream			&operator<<(std::ostream& oss, Rpn &rhs)
-{
-	oss << COL_GRN << rhs.calculator() << "\n" << COL_RES;
-	return oss;
-}
-
-bool					Rpn::is_operation(char	&c)
-{
-	return (c == '*' || c == '/' || c == '+' || c == '-');
-}
 
 

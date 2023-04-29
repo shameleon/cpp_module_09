@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Rpn.hpp                                            :+:      :+:    :+:   */
+/*   RPN.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmouaike <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -29,39 +29,49 @@
 # include <cstdlib>				// std::rand()
 # include <ctime>				// srand (time(NULL))
 
+enum	e_which_char
+{
+	IS_SPACER = 0,
+	IS_DIGIT,
+	IS_OPERATOR,
+	IS_INVALID,
+};
 
-class Rpn
+enum	e_operation
+{
+	MULTIPLY = 52,
+	ADD = 53,
+	SUBSTRACT = 55,
+	DIVIDE = 57,
+};
+
+class RPN
 {
 	private:
-		std::deque<char>		*_mdeq;
+		std::stack<int>			*_mstack;
 		std::string				_input;
 		unsigned int			_operands;
 		unsigned int			_operators;
 
-		Rpn(void);
-		Rpn(Rpn &other);
-		Rpn						&operator=(Rpn &rhs);
+		RPN(void);
+		RPN(RPN &other);
+		RPN						&operator=(RPN &rhs);
 
-		bool				is_operation(char	&c);
+		int						whichInputChar(char &c);
+		void					popTwo_calculate_push(char c);
 
 	public:
-		Rpn(std::string &input_operation);
-		~Rpn(void);
-
+		RPN(std::string &input_operation);
+		~RPN(void);
 
 		void					parseInput(void);
-		void					validOperation(void);
-		int						calculator(void);
-		void					printStack(void) const;
 
-		class		RpnErrorException : public std::exception
+		class		RPNErrorException : public std::exception
 		{
 			public:
 				virtual const char		*what(void) const throw();
 		};
 };
-
-std::ostream			&operator<<(std::ostream& oss, Rpn &rhs);
 
 #endif
 

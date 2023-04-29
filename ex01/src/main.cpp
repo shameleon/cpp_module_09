@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Rpn.hpp"
+#include "../inc/RNP.hpp"
 
 /* *********************** */
-/*  Ex01  RPN              */
+/*  Ex01  RNP              */
 /* *********************** */
 
 int					main(int argc, char **argv)
@@ -24,20 +24,28 @@ int					main(int argc, char **argv)
 		try
 		{
 			std::string  input_operation = static_cast <std::string>(argv[1]);
-			Rpn		my_rpn(input_operation);
+			RNP		my_RNP(input_operation);
 		}
-		catch(const Rpn::RpnErrorException  &e)
+		catch(const RNP::RNPErrorException  &e)
 		{
 			std::cerr << COL_BRED << e.what() << COL_RES << std::endl;
 		}
 		break;
 	default:
-		std::cout << COL_AUB << "./RPN \"operation\" " << COL_RES << std::endl;
+		std::cout << COL_AUB << "./RNP \"operation\" " << COL_RES << std::endl;
 		break;
 	}
 	return 0;
 }
 
 /*
+https://wisdomsky.github.io/reverse-polish-notation-js-parser/
 
+"z 3 3 +"      ===>invalid
+"   3 5 + 4-"  ===> 4
+"5 1 1 1---"   ===> 3 
+"5    2 +7/"   ===> 1
+"5 2 + 1 3 * +" ====> 10
+"5 2 + 1 3 * *"  ===> 21
+5 2 1 3 + * + === 13
 */
