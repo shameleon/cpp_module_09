@@ -13,10 +13,9 @@
 #ifndef RPN_HPP
 # define RPN_HPP
 
-/* class Span */
 # include <iostream>
 # include <stack>
-# include <stdexcept>			// std::except
+# include <stdexcept>
 # include "colors.hpp"
 
 enum	e_which_char
