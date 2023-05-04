@@ -40,13 +40,26 @@ bool	checkDate(std::string &date)
 	return true;
 }
 
+// precision issue 
 bool	checkExchangeRate(std::string &exchange)
 {
 	char	*end;
 	double	value = strtod(exchange.c_str(), &end);
-	std::cout << " val = " << value << " ";
+	std::cout << " strtod=" << value << " ";
 	if (*end != '\0')
 		return false;
+	if (value < 0 )  // inf nan 
+		return false;
+	return true;
+}
+
+bool	checkExchangeRate2(std::string &exchange)
+{
+	std::stringstream	ss;
+	ss << exchange;
+	double	value;
+	ss >> value;
+	std::cout << " ss=" << value << " ";
 	if (value < 0 )  // inf nan 
 		return false;
 	return true;
@@ -79,7 +92,10 @@ int	main(void)
 				std::getline(ss, exchange);
 				if (!checkExchangeRate(exchange))
 					throw std::runtime_error("Error Exchange Rate format");
+				if (!checkExchangeRate2(exchange))
+					throw std::runtime_error("Error Exchange Rate format");
 				std::cout << exchange << std::endl;
+			
 			}
 		}
 		datafile.close();

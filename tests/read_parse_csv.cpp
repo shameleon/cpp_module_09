@@ -38,6 +38,7 @@ int	main(void)
 			t_ymd	dt;
 			int		date;
 			double  val;
+			// precission with double !!!!! 47115.9 instead of 47115.93
 			int		res = std::sscanf (line.c_str(), "%4d-%2d-%2d,%lf", &dt.y, &dt.m, &dt.d, &val);
 			if (res != 4)
 				throw std::runtime_error("Error : database format");
@@ -53,6 +54,7 @@ int	main(void)
 		if (key1 < 20090102)
 			throw std::runtime_error("Error : bitcoin did not exist at that time");
 		bool	found = false;
+		int		i = 0;
 		while (!found || key1 < 20090102)
 		{
 			if (42)
@@ -79,7 +81,9 @@ int	main(void)
 			}
 			else
 				key1--;
+			i++;
 		}
+		std::cout << "found in " << i << "iterations \n";
 	}
 	catch(const std::exception& e)
 	{

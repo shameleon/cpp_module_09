@@ -25,6 +25,8 @@ int     main(void)
 	// find existing key
 	std::string  key1 = "2017-12-28";
 	std::cout << "key1 " << data.find(key1)->second << std::endl;
+	std::string  key3 = "2019-09-13";
+	std::cout << "key3 " << data.find(key3)->second << std::endl;
 	// find non-existing key
 	std::map<std::string, double>::iterator it;
 	std::string  key2 = "2017-12-29";
