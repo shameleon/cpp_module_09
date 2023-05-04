@@ -40,26 +40,6 @@ bool	checkDate(std::string &date)
 	return true;
 }
 
-/*
-https://stackoverflow.com/questions/11213326/how-to-convert-a-string-variable-containing-time-to-time-t-type-in-c
-
-            when.tm_year = YY - 1900; //Years from 1900
-            when.tm_mon = MM - 1; //0-based
-            when.tm_mday = DD; //1 based
-
-            when.tm_hour = hh;
-            when.tm_min = mm;
-            when.tm_sec = ss;
-
-            //Make sure the daylight savings is same as current timezone.
-            time_t now = time(0);
-            when.tm_isdst = std::localtime(&now)->tm_isdst;
-
-            //Convert the tm struct to the Linux epoch
-            time_t converted;
-            converted = mktime(&when);
-*/
-
 bool	checkExchangeRate(std::string &exchange)
 {
 	char	*end;
