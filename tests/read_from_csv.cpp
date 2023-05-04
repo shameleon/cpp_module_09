@@ -8,22 +8,68 @@
 #include <sstream>
 #include <iterator>
 #include <stdexcept>
+#include <ctime>
+#include <stdio.h>
+#include <cstdlib>
 
 bool	checkDate(std::string &date)
 {
 	if (date.length() != 10)
 		return false;
-	
+	for (int i = 0; i < 10; i++)
+	{
+		if (i == 4 || i == 7) 
+		{
+			if (date[i] != '-')
+				return false;
+		}
+		else if (!isdigit(date[i]))
+			return false; 
+	}
+	//int		year, month, day;
+	//struct tm	when;
+	//memset(&tm, 0, sizeof(tm));
+	//int res = swscanf(date.c_str(), L"%d-%d-%d", &year, &month, &day);
+	//In case datetime was in bad format, returns 0.
+	//if (res == EOF || res == 0)
+	//	return false;
+	//when.tm_year = year -1900;
+	//when.tm_mon = month - 1;
+	//when.tm_mday = day;
+
 	return true;
 }
 
+/*
+https://stackoverflow.com/questions/11213326/how-to-convert-a-string-variable-containing-time-to-time-t-type-in-c
+
+            when.tm_year = YY - 1900; //Years from 1900
+            when.tm_mon = MM - 1; //0-based
+            when.tm_mday = DD; //1 based
+
+            when.tm_hour = hh;
+            when.tm_min = mm;
+            when.tm_sec = ss;
+
+            //Make sure the daylight savings is same as current timezone.
+            time_t now = time(0);
+            when.tm_isdst = std::localtime(&now)->tm_isdst;
+
+            //Convert the tm struct to the Linux epoch
+            time_t converted;
+            converted = mktime(&when);
+*/
+
 bool	checkExchangeRate(std::string &exchange)
 {
-	//char	*end;
-	//double	value = strtod(exchange, &end);
-	if (exchange.compare(" ") != 0)
-		return true;
-	return false;
+	char	*end;
+	double	value = strtod(exchange.c_str(), &end);
+	std::cout << " val = " << value << " ";
+	if (*end != '\0')
+		return false;
+	if (value < 0 )  // inf nan 
+		return false;
+	return true;
 }
 
 int	main(void)
