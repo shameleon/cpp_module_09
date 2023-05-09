@@ -52,7 +52,7 @@ $(NAME): $(OBJ)
 	@echo "./$(NAME) executable is ready !"
 	$(COL_RESET)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp 
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(DEP_DIR)
 	$(COL_YEL)

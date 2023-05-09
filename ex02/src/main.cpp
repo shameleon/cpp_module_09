@@ -44,7 +44,7 @@ int					main(int argc, char **argv)
 }
 
 /*
-Issues :
+issues :
 1- constructor by copy and copy assignement operator=
 
 2- necessary space before operator ? unecessary befor digit ?
@@ -58,7 +58,6 @@ On est sense l'accepter avec le / et le + qui se suivent a la fin ?
 4- const
 
 5- handle multiple exceptions : explicit error messages
-			throw std::runtime_error("Error opening output file");
 
 6- int overflow => switch to double ? throw exception ?
 
