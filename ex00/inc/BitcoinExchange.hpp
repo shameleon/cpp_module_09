@@ -39,7 +39,8 @@ class BitcoinExchange
 
 		bool							checkDate(int const date);
 		bool							loadDataBase(void);
-
+		double							searchKey(int &date, double & assets);
+		
 	public:
 		BitcoinExchange(void);
 		~BitcoinExchange(void);
