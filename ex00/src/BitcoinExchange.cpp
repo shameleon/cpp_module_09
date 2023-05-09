@@ -40,7 +40,7 @@ BitcoinExchange				&BitcoinExchange::operator=(BitcoinExchange &rhs)
 
 void						BitcoinExchange::printDataBtc(bool full) const
 {
-	std::cout << "DB size = " << this->_btc_db->size() << " entries" << std::endl;
+	std::cout << "DB size : " << this->_btc_db->size() << " entries" << std::endl;
 	if (!full)
 		return ;
 	std::cout.precision(2);
@@ -49,9 +49,6 @@ void						BitcoinExchange::printDataBtc(bool full) const
 			it != this->_btc_db->end(); ++it)
 	{
 		std::cout << COL_VIOL << it->first << " : ";
-		// precision issue
-		//std::cout.precision(1);
-		//std::cout << std::setiosflags(std::ios::fixed);
 		std::cout << COL_ORANGE << it->second << COL_RES << std::endl;
 	}
 }
@@ -92,9 +89,6 @@ bool						BitcoinExchange::loadDataBase(void)
 			if (res != 4)
 				throw std::runtime_error("Error : invalid data format");
 			date = yy * 10000 + mm * 100 + dd;
-			//std::cout.precision(2);
-			//std::cout << std::setiosflags(std::ios::fixed);
-			//std::cout << date << " " <<  value << std::endl;
 			if (checkDate(date))
 				this->_btc_db->insert(std::pair<int, double>(date, value));
 				//this->_btc_db[date] = value;
@@ -120,14 +114,64 @@ void				BitcoinExchange::monetaryValue(std::string const &input_file)
 	std::ifstream			ifs(input_file.c_str());
 	std::string				line;
 
+	if (this->_valid_db == false)
+		return ;
 	if (!ifs.is_open())
-		throw std::runtime_error("Error : could not open file.");
+		throw std::runtime_error("Error : could not open input file.");
 	std::getline(ifs, line);
 	if (line.compare("date | value") != 0)
-		throw std::runtime_error("Error : invalid header line in file.");
-	//findKey();
+		throw std::runtime_error("Error : invalid header line in input file.");
+	while (ifs.good() && std::getline(ifs, line))
+	{
+		int					date, yy, mm, dd;
+		double				assets;
 
+		int		res = std::sscanf (line.c_str(), "%4d-%2d-%2d | %lf", &yy, &mm, &dd, &assets);
+		if (res != 4)
+			throw BadInputException();
+		date = yy * 10000 + mm * 100 + dd;
+		if (date < 20090102)
+			throw BadInputException();
+			// ??
+		if (!checkDate(date))
+			throw BadInputException();
+		if (assets < 0)
+			throw NotPositiveNumberException();
+		if (assets > 2147483648)
+			throw ToolargeNumberException();
+		std::cout << COL_VIOL << line << " => ";
+		std::cout << COL_ORANGE << searchKey(date, assets) << COL_RES<< std::endl;
+	}
+	ifs.close();
 	return ;
+}
+
+double				BitcoinExchange::searchKey(int &date, double & assets)
+{
+	int		key = date;
+	bool	found = false;
+
+	std::map<int, double>::iterator		it;
+	while (!found || key < 20090102)
+	{
+		it = this->_btc_db->find(date);
+		if (it != this->_btc_db->end())
+		{
+			found = true;
+			//this->_btc_db.erase(it);
+			return (assets * it->second);
+		}
+		if (key - (key / 100) * 100 == 1)   // day
+		{
+			if (key - (key / 10000) * 10000 == 101)   // jan01
+				key -= 8870;  // 31-dec of previous year 20170101 --> 20161231
+			else
+				key -= 70;
+		}
+		else
+			key--;
+	}
+	return 0;
 }
 
 const char				*BitcoinExchange::NotPositiveNumberException::what(void) const throw()

@@ -27,8 +27,8 @@ int					main(int argc, char **argv)
 
 			try
 			{
-				mbtc.printDataBtc(true);
-				//mbtc.monetaryValue(input_file);
+				mbtc.printDataBtc(false);
+				mbtc.monetaryValue(input_file);
 			}
 			catch(const std::exception  &e)
 			{
