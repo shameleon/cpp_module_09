@@ -23,13 +23,14 @@ int					main(int argc, char **argv)
 	case 2:
 		{
 			std::string			input_file = static_cast <std::string>(argv[1]);
-			BitcoinExchange		btc();
+			BitcoinExchange		mbtc;
 
 			try
 			{
-				btc.monetaryValue(input_file );
+				mbtc.printDataBtc(true);
+				//mbtc.monetaryValue(input_file);
 			}
-			catch(const std::Exception  &e)
+			catch(const std::exception  &e)
 			{
 				std::cerr << COL_BRED << e.what() << COL_RES << std::endl;
 				
@@ -44,6 +45,8 @@ int					main(int argc, char **argv)
 }
 
 /*
+./btc ../cpp_09_tgz/input.txt 
+
 Subject :
 
 You have to create a program which outputs the value of a certain amount of bitcoin

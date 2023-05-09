@@ -14,7 +14,8 @@
 
 BitcoinExchange::BitcoinExchange(void)
 {
-	this->_btc_bd = new std::map<const int, double>;
+	this->_btc_db = new std::map<int, double>;
+	_valid_db = loadDataBase();
 	return ;
 }
 
@@ -26,8 +27,8 @@ BitcoinExchange::BitcoinExchange(BitcoinExchange &other)
 
 BitcoinExchange::~BitcoinExchange(void)
 {
-	if (this->_mstack)
-		delete this->_mstack;
+	if (this->_btc_db)
+		delete this->_btc_db;
 	return ;
 }
 
@@ -37,29 +38,34 @@ BitcoinExchange				&BitcoinExchange::operator=(BitcoinExchange &rhs)
 	return *this;
 }
 
-// precision issue 
-bool						BitcoinExchange::checkExchangeRate(std::string &exchange)
+void						BitcoinExchange::printDataBtc(bool full) const
 {
-	char					*end;
-	double					value = strtod(exchange.c_str(), &end);
-
-	std::cout << " strtod=" << value << " ";
-	if (*end != '\0')
-		return false;
-	if (value < 0 )  // inf nan 
-		return false;
-	return true;
+	std::cout << "DB size = " << this->_btc_db->size() << " entries" << std::endl;
+	if (!full)
+		return ;
+	std::cout.precision(2);
+	std::cout << std::setiosflags(std::ios::fixed);
+	for (std::map< int, double>::iterator it = this->_btc_db->begin();
+			it != this->_btc_db->end(); ++it)
+	{
+		std::cout << COL_VIOL << it->first << " : ";
+		// precision issue
+		//std::cout.precision(1);
+		//std::cout << std::setiosflags(std::ios::fixed);
+		std::cout << COL_ORANGE << it->second << COL_RES << std::endl;
+	}
 }
-
-bool						BitcoinExchange::checkExchangeRate2(std::string &exchange)
+bool						BitcoinExchange::checkDate(int const date)
 {
-	std::stringstream		ss;
+	int		yy = date / 10000;
+	int		mm = (date - yy * 10000) / 100;
+	int		dd = date - yy * 10000 - mm *100;
 
-	ss << exchange;
-	double	value;
-	ss >> value;
-	std::cout << " ss=" << value << " ";
-	if (value < 0 )  // inf nan 
+	if ( yy < 2009 || yy > 2030 || mm < 1 || mm > 12 || dd < 1 || dd > 31)
+		return false;
+	if ( mm == 2 && ((yy % 4 != 0 && dd > 28) || (yy % 4 == 0 && dd > 29)))
+		return false;
+	if ((mm == 4 || mm == 6 || mm == 9 || mm == 11) && dd == 31 )
 		return false;
 	return true;
 }
@@ -67,83 +73,60 @@ bool						BitcoinExchange::checkExchangeRate2(std::string &exchange)
 
 bool						BitcoinExchange::loadDataBase(void)
 {
-	std::ifstream			datafile("../cpp_09_tgz/data.csv");
+	std::ifstream			ifs("../cpp_09_tgz/data.csv");
 	std::string				line;
 
 	try
 	{
-		if (!datafile.is_open())
-			throw std::runtime_error("Error opening output file");
-		std::getline(datafile, line);
+		if (!ifs.is_open())
+			throw std::runtime_error("Error : could not open data file.");
+		std::getline(ifs, line);
 		if (line.compare("date,exchange_rate") != 0)
-			throw std::runtime_error("Error Invalid file header (line 0)");
-		while (std::getline(datafile, line))
+			throw std::runtime_error("Error : invalid header line in data file.");
+		while (ifs.good() && std::getline(ifs, line))
 		{
-			std::stringstream				ss(line);
-			if (ss.good())
-			{
-				std::string		date;
-				std::getline(ss, date, ',');
-				if (!checkDate(date))
-					throw std::runtime_error("Error Date format");
-				std::cout << date << "......"; 
-				std::string			exchange;
-				std::getline(ss, exchange);
-				if (!checkExchangeRate(exchange))
-					throw std::runtime_error("Error Exchange Rate format");
-				if (!checkExchangeRate2(exchange))
-					throw std::runtime_error("Error Exchange Rate format");
-				std::cout << exchange << std::endl;
-			
-			}
-		}
-		datafile.close();
+			int			date, yy, mm, dd;
+			double		value;
+
+			int		res = std::sscanf (line.c_str(), "%4d-%2d-%2d,%lf", &yy, &mm, &dd, &value);
+			if (res != 4)
+				throw std::runtime_error("Error : invalid data format");
+			date = yy * 10000 + mm * 100 + dd;
+			//std::cout.precision(2);
+			//std::cout << std::setiosflags(std::ios::fixed);
+			//std::cout << date << " " <<  value << std::endl;
+			if (checkDate(date))
+				this->_btc_db->insert(std::pair<int, double>(date, value));
+				//this->_btc_db[date] = value;
+			else
+				throw std::runtime_error("Error : date out of range");
+		} 
+		ifs.close();
+		return true;
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << COL_PUR << e.what() << COL_RES << std::endl;
 	}
-	return true;
+	return false;
 }
 
-void						BitcoinExchange::popTwo_calculate_push(char &c)
-{
-	if (this->_mstack->size() < 2)
-		throw (BitcoinExchange::BitcoinExchangeErrorException());
-	int 	operand1 = this->_mstack->top();
-	this->_mstack->pop();
-	int 	operand2 = this->_mstack->top();
-	this->_mstack->pop();
-	switch (static_cast< int >(c))
-	{
-	case MULTIPLY:
-		operand2 *= operand1;
-		break;
-	case ADD:
-		operand2 += operand1;
-		break;
-	case SUBSTRACT:
-		operand2 -= operand1;
-		break;
-	case DIVIDE:
-		if (operand1)
-			operand2 /= operand1;
-		else
-			throw (BitcoinExchange::BitcoinExchangeErrorException());
-		break;
-	default:
-		break;
-	}
-	this->_mstack->push(operand2);
-	return ;
-}
 
-/* parses input string :
-digit is pushed to stack
-operator token => pop two calculate the push result
+/* 
+public 
  */
-void				BitcoinExchange::monetaryValue(void)
+void				BitcoinExchange::monetaryValue(std::string const &input_file)
 {
+	std::ifstream			ifs(input_file.c_str());
+	std::string				line;
+
+	if (!ifs.is_open())
+		throw std::runtime_error("Error : could not open file.");
+	std::getline(ifs, line);
+	if (line.compare("date | value") != 0)
+		throw std::runtime_error("Error : invalid header line in file.");
+	//findKey();
+
 	return ;
 }
 
@@ -157,10 +140,11 @@ const char				*BitcoinExchange::ToolargeNumberException::what(void) const throw(
 	return ("Error : too large a number.");
 }
 
-const char				*BitcoinExchange::BadInputException::what(std::string &date) const throw()
+const char				*BitcoinExchange::BadInputException::what(void) const throw()
 {
-	std::string		error_mssg;
-	error_mssg = "Error : bad input => ";
-	return (error_mssg + date);
+	//std::string		error_mssg;
+	//std::string		date = "";
+	//error_mssg = "Error : bad input => ";
+	return ("Error : bad input => ");
 }
 

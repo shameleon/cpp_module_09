@@ -30,21 +30,22 @@
 class BitcoinExchange
 {
 	private:
-		std::map< const int, double >			*_btc_db;
+		std::map<int, double>			*_btc_db;
+		bool							_valid_db;
 		//std::string				_input;
 
 		BitcoinExchange(BitcoinExchange &other);
-		BitcoinExchange					&operator=(RPN &rhs);
+		BitcoinExchange					&operator=(BitcoinExchange &rhs);
 
-		bool							checkExchangeRate2(void);
-		bool							checkExchangeRate(void);
+		bool							checkDate(int const date);
 		bool							loadDataBase(void);
 
 	public:
 		BitcoinExchange(void);
 		~BitcoinExchange(void);
 
-		void							monetaryValue(void);
+		void							printDataBtc(bool full) const;
+		void							monetaryValue(std::string const &input_file);
 
 		class		NotPositiveNumberException : public std::exception
 		{
@@ -61,7 +62,7 @@ class BitcoinExchange
 		class		BadInputException : public std::exception
 		{
 			public:
-				virtual const char		*what(std::string &date) const throw();
+				virtual const char		*what(void) const throw();
 		};
 };
 
