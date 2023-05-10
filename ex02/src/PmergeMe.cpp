@@ -18,7 +18,7 @@ PmergeMe::PmergeMe(void)
 	return ;
 }
 
-PmergeMe::PmergeMe(int argc, char ** argv)  //:_length(argc - 1)
+PmergeMe::PmergeMe(int argc, char ** argv):_argc(argc - 1)
 {
 	this->_pvec = new std::vector<int>;
 
@@ -38,6 +38,8 @@ PmergeMe::PmergeMe(int argc, char ** argv)  //:_length(argc - 1)
 		std::cout << ln << " ";
 		this->_pvec->push_back(static_cast<int>(ln));
 	}
+	std::cout << std::endl;
+	sort();
 	return ;
 }
 
@@ -60,11 +62,39 @@ PmergeMe			&PmergeMe::operator=(PmergeMe &rhs)
 	return *this;
 }
 
-/* parses input args : 
+void				PmergeMe::autosort(void)
+{
+	// sort function
+	std::sort(this->_pvec->begin(), this->_pvec->end());
+}
+
+
+/*  
  */
 void				PmergeMe::sort(void)
 {
+	// display vector content
+	std::cout << "Before : ";
+	for (std::vector<int>::iterator it = this->_pvec->begin();
+			it != this->_pvec->end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
 
+	clock_t		start, stop;
+	double		delta_t_us = 0;
+	start = std::clock();
+	// auto sort function
+	autosort();
+	stop = std::clock();
+	// display vector content
+	std::cout << "After : ";
+	for (std::vector<int>::iterator it = this->_pvec->begin(); 
+			it != this->_pvec->end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	delta_t_us += ( static_cast< double >(stop - start) * 1E6 ) / CLOCKS_PER_SEC ;
+	std::cout << "Time to process a range of " << (_argc - 1) << " elements with std::sort :  ";
+	std::cout << delta_t_us << " microseconds \n";
 	return ;
 }
 

@@ -25,7 +25,7 @@
 class PmergeMe
 {
 	private:
-		//int						_length;
+		int						_argc;
 		std::vector<int>		*_pvec;
 
 
@@ -33,6 +33,7 @@ class PmergeMe
 		PmergeMe(PmergeMe &other);
 		PmergeMe				&operator=(PmergeMe &rhs);
 
+		void					autosort(void);
 		void					sort(void);
 
 	public:
