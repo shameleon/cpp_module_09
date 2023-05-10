@@ -21,13 +21,11 @@ int					main(int argc, char **argv)
 	switch (argc)
 	{
 	case 2:
-		{
-			std::string			input_file = static_cast <std::string>(argv[1]);
-			BitcoinExchange		mbtc;
+		std::string			input_file = static_cast <std::string>(argv[1]);
+		BitcoinExchange		mbtc;
 
-			//mbtc.printDataBtc(false);
-			mbtc.monetaryValue(input_file);
-		}
+		//mbtc.printDataBtc(false);
+		mbtc.monetaryValue(input_file);
 		break;
 	default:
 		std::cout << COL_AUB << "Error: could not open file" << COL_RES << std::endl;
@@ -39,6 +37,7 @@ int					main(int argc, char **argv)
 /*
 Major issues
 
+1 - copy constructor and operator=
 0 + test a directory as argument, chmod00 : IOT instruction ...
 1 + valgrind leaks if cannot open file
 2 - bad input exception : cout the invalid date
