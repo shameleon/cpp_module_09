@@ -18,7 +18,7 @@ PmergeMe::PmergeMe(void)
 	return ;
 }
 
-PmergeMe::PmergeMe(int argc, char ** argv):_argc(argc - 1)
+PmergeMe::PmergeMe(int argc, char ** argv):_argc(argc)
 {
 	this->_pvec = new std::vector<int>;
 
@@ -93,7 +93,7 @@ void				PmergeMe::sort(void)
 		std::cout << *it << " ";
 	std::cout << std::endl;
 	delta_t_us += ( static_cast< double >(stop - start) * 1E6 ) / CLOCKS_PER_SEC ;
-	std::cout << "Time to process a range of " << (_argc - 1) << " elements with std::sort :  ";
+	std::cout << "Time to process a range of " << ( _argc - 1 ) << " elements with std::sort :  ";
 	std::cout << delta_t_us << " microseconds \n";
 	return ;
 }
