@@ -11,11 +11,11 @@
 # **************************************************************************** #
 
 ###### binary ######	
-NAME		= RPN
+NAME		= PmergeMe
 
 ###### sources ######	
 SRC_FILES	= \
-				RPN.cpp \
+				PmergeMe.cpp \
 				main.cpp \
 
 ###### directories ######	

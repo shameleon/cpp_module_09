@@ -79,6 +79,9 @@ int		main(int argc, char**argv)
 
 ./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "`
 
+  elements | location  |   algo.    |   
+	3000   |  Macbook  | "autosort" |  1132
+	3000   |  cluster  | "autosort" |   768
 Time to process a range of 3000 elements with std::sort :  1.132 milliseconds 
 Time to process a range of 3000 elements with std::sort :  1152 microseconds 
 function call :

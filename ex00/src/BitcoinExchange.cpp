@@ -52,6 +52,7 @@ void						BitcoinExchange::printDataBtc(bool full) const
 		std::cout << COL_ORANGE << it->second << COL_RES << std::endl;
 	}
 }
+
 bool						BitcoinExchange::checkDate(int const date)
 {
 	int		yy = date / 10000;
@@ -70,12 +71,13 @@ bool						BitcoinExchange::checkDate(int const date)
 
 bool						BitcoinExchange::loadDataBase(void)
 {
-	std::ifstream			ifs("../cpp_09_tgz/data.csv");
+	std::ifstream			ifs;
 	std::string				line;
 
 	try
 	{
-		if (!ifs.is_open())
+		ifs.open(BITCOIN_DATABASE);
+		if (!ifs || !ifs.is_open())
 			throw std::runtime_error("Error : could not open data file.");
 		std::getline(ifs, line);
 		if (line.compare("date,exchange_rate") != 0)
@@ -105,7 +107,6 @@ bool						BitcoinExchange::loadDataBase(void)
 	return false;
 }
 
-
 /* 
 public 
  */
@@ -114,64 +115,87 @@ void				BitcoinExchange::monetaryValue(std::string const &input_file)
 	std::ifstream			ifs(input_file.c_str());
 	std::string				line;
 
-	if (this->_valid_db == false)
-		return ;
-	if (!ifs.is_open())
-		throw std::runtime_error("Error : could not open input file.");
-	std::getline(ifs, line);
-	if (line.compare("date | value") != 0)
-		throw std::runtime_error("Error : invalid header line in input file.");
+	try
+	{
+		if (this->_valid_db == false)
+			return ;
+		if (!ifs.is_open())
+			throw InvalidFileException();
+		std::getline(ifs, line);
+		if (line.compare("date | value") != 0)
+			throw std::runtime_error("Error : invalid header line in input file.");
+	}
+	catch(const std::exception &e)
+	{
+		std::cerr << COL_BRED << e.what() << COL_RES << std::endl;
+	}
 	while (ifs.good() && std::getline(ifs, line))
 	{
-		int					date, yy, mm, dd;
-		double				assets;
+		try
+		{
+			int					date, yy, mm, dd;
+			double				assets;
 
-		int		res = std::sscanf (line.c_str(), "%4d-%2d-%2d | %lf", &yy, &mm, &dd, &assets);
-		if (res != 4)
-			throw BadInputException();
-		date = yy * 10000 + mm * 100 + dd;
-		if (date < 20090102)
-			throw BadInputException();
-			// ??
-		if (!checkDate(date))
-			throw BadInputException();
-		if (assets < 0)
-			throw NotPositiveNumberException();
-		if (assets > 2147483648)
-			throw ToolargeNumberException();
-		std::cout << COL_VIOL << line << " => ";
-		std::cout << COL_ORANGE << searchKey(date, assets) << COL_RES<< std::endl;
+			int		res = std::sscanf (line.c_str(), "%4d-%2d-%2d | %lf", &yy, &mm, &dd, &assets);
+			if (res != 4)
+				throw BadInputException();
+			date = yy * 10000 + mm * 100 + dd;
+			if (date < OLDEST_DATE)
+				throw BadInputException();
+				// ??
+			if (!checkDate(date))
+				throw BadInputException();
+			if (assets < 0)
+				throw NotPositiveNumberException();
+			if (assets > ASSET_MAX)
+				throw ToolargeNumberException();
+			std::cout << COL_BGRN << line << COL_RES << " => ";
+			std::cout << COL_ORANGE << searchKey(date, assets) << COL_RES<< std::endl;
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << COL_BRED << e.what() << COL_RES << std::endl;
+		}
 	}
 	ifs.close();
 	return ;
 }
 
-double				BitcoinExchange::searchKey(int &date, double & assets)
+double				BitcoinExchange::searchKey(int const &date, double const &assets)
 {
-	int		key = date;
-	bool	found = false;
-
+	int									key = date;
+	bool								found = false;
+	int									i = 0;
 	std::map<int, double>::iterator		it;
-	while (!found || key < 20090102)
+
+	while (!found && key >= OLDEST_DATE && i < 5)
 	{
-		it = this->_btc_db->find(date);
+		it = this->_btc_db->find(key);
 		if (it != this->_btc_db->end())
 		{
 			found = true;
-			//this->_btc_db.erase(it);
+			//this->_btc_db->erase(it);
 			return (assets * it->second);
 		}
 		if (key - (key / 100) * 100 == 1)   // day
 		{
 			if (key - (key / 10000) * 10000 == 101)   // jan01
-				key -= 8870;  // 31-dec of previous year 20170101 --> 20161231
+				key -= 8870;  // 31-dec of previous year : 20170101 --> 20161231
 			else
 				key -= 70;
 		}
 		else
 			key--;
+		i++;
 	}
 	return 0;
+}
+
+const char				*BitcoinExchange::InvalidFileException::what() const throw()
+{
+	//std::cerr << //std::string		error_mssg = "Error : bad input => ";
+	//error_mssg += mssg;
+	return ("Error : could not open input file.");
 }
 
 const char				*BitcoinExchange::NotPositiveNumberException::what(void) const throw()
@@ -184,11 +208,10 @@ const char				*BitcoinExchange::ToolargeNumberException::what(void) const throw(
 	return ("Error : too large a number.");
 }
 
-const char				*BitcoinExchange::BadInputException::what(void) const throw()
+const char				*BitcoinExchange::BadInputException::what() const throw()
 {
-	//std::string		error_mssg;
-	//std::string		date = "";
-	//error_mssg = "Error : bad input => ";
+	//std::cerr << //std::string		error_mssg = "Error : bad input => ";
+	//error_mssg += mssg;
 	return ("Error : bad input => ");
 }
 

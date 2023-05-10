@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RPN.hpp                                            :+:      :+:    :+:   */
+/*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmouaike <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,50 +10,37 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RPN_HPP
-# define RPN_HPP
+#ifndef PMERGEME_HPP
+# define PMERGEME_HPP
 
 # include <iostream>
-# include <stack>
+# include <vector>
+# include <limits>
+# include <cstdlib>
+# include <ctime>
+# include <algorithm>  // sort
 # include <stdexcept>
 # include "colors.hpp"
 
-enum	e_which_char
-{
-	IS_SPACER = 0,
-	IS_DIGIT,
-	IS_OPERATOR,
-	IS_INVALID,
-};
-
-enum	e_operation
-{
-	MULTIPLY = 42,
-	ADD = 43,
-	SUBSTRACT = 45,
-	DIVIDE = 47,
-};
-
-class RPN
+class PmergeMe
 {
 	private:
-		std::stack<int>			*_mstack;
-		std::string				_input;
+		int						_argc;
+		std::vector<int>		*_pvec;
 
-		RPN(void);
-		RPN(RPN &other);
-		RPN						&operator=(RPN &rhs);
 
-		int						whichInputChar(char &c);
-		void					popTwo_calculate_push(char &c);
+		PmergeMe(void);
+		PmergeMe(PmergeMe &other);
+		PmergeMe				&operator=(PmergeMe &rhs);
+
+		void					autosort(void);
+		void					sort(void);
 
 	public:
-		RPN(std::string &input_operation);
-		~RPN(void);
+		PmergeMe(int argc, char **argv);
+		~PmergeMe(void);
 
-		void					calculator(void);
-
-		class		RPNErrorException : public std::exception
+		class		PmergeMeErrorException : public std::exception
 		{
 			public:
 				virtual const char		*what(void) const throw();

@@ -21,21 +21,11 @@ int					main(int argc, char **argv)
 	switch (argc)
 	{
 	case 2:
-		{
-			std::string			input_file = static_cast <std::string>(argv[1]);
-			BitcoinExchange		mbtc;
+		std::string			input_file = static_cast <std::string>(argv[1]);
+		BitcoinExchange		mbtc;
 
-			try
-			{
-				mbtc.printDataBtc(false);
-				mbtc.monetaryValue(input_file);
-			}
-			catch(const std::exception  &e)
-			{
-				std::cerr << COL_BRED << e.what() << COL_RES << std::endl;
-				
-			}
-		}
+		//mbtc.printDataBtc(false);
+		mbtc.monetaryValue(input_file);
 		break;
 	default:
 		std::cout << COL_AUB << "Error: could not open file" << COL_RES << std::endl;
@@ -45,6 +35,23 @@ int					main(int argc, char **argv)
 }
 
 /*
+Major issues
+
+1 - copy constructor and operator=
+0 + test a directory as argument, chmod00 : IOT instruction ...
+1 + valgrind leaks if cannot open file
+2 - bad input exception : cout the invalid date
+3 - handle a date after 2022-03-29 ( how to key max )
+4 - map <const int, double>
+5 - functions like checkDate
+6 - keys as strings - push pop  : use iterator on string 
+	https://cplusplus.com/reference/string/string/begin/
+7 - last DB date : as attribute 
+8 - recent or future date : output ?
+	get better return with SearchKey
+9 - asset is 1 to 1000 range : 2018-02-03 | 0
+A valid value must be either a float or a positive integer between 0 and 1000
+
 ./btc ../cpp_09_tgz/input.txt 
 
 Subject :
@@ -65,4 +72,18 @@ You must use at least one container in your code to validate this
 exercise. You should handle possible errors with an appropriate
 error message
 
+
+
+std::map
+
+Associative
+    Elements in associative containers are referenced by their key and not by their absolute position in the container.
+Ordered
+    The elements in the container follow a strict order at all times. All inserted elements are given a position in this order.
+Map
+    Each element associates a key to a mapped value: Keys are meant to identify the elements whose main content is the mapped value.
+Unique keys
+    No two elements in the container can have equivalent keys.
+Allocator-aware
+    The container uses an allocator object to dynamically handle its storage needs. 
 */
