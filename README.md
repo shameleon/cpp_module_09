@@ -1,14 +1,30 @@
 # cpp_module_09
 
 ## ex 00 : Bitcoin
-A `std::map` is a container that stores key-value pairs, where each key maps to a unique value. 
+
+A `std::map` is a container that stores key-value pairs, where each key maps to a unique value.
 
 ![map to file](https://marketsplash.com/tutorials/cpp/cplusplus-map-to-file/)
 
 ## ex 01 : RPN calculator
 
-## ex 02 : PmergeMe 
+## ex 02 : PmergeMe
+
+![insert sort](https://www.programiz.com/dsa/insertion-sort)
+
+![merge sort](https://www.programiz.com/dsa/merge-sort)
+
+![binary search](https://www.tutorialspoint.com/binary-insertion-sort-in-cplusplus)
+
+![wikipedia : merge-insertion sort](https://en.wikipedia.org/wiki/Merge-insertion_sort)
+`Merge-insertion sort` or the `Ford–Johnson` algorithm is a comparison sorting algorithm published in 1959 by L. R. Ford Jr. and Selmer M. Johnson.
+    Ford, Lester R., Jr.; Johnson, Selmer M. A tournament problem. Amer. Math. Monthly 66 (1959), 387–389.
+
 ![merge insert sort in Java](https://iq.opengenus.org/merge-insertion-sort/)
+
+
+https://cplusplus.com/forum/beginner/115630/
+
 
 merge insert sort in C++
 
