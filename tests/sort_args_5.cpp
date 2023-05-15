@@ -91,9 +91,27 @@ void	merge(std::vector<int> &vec, int left, int mid, int right)
 	return;
 }
 
-void	sortPair(std::vector < pair <int, int> > vip, std::vector<int> &vec, int left, int right )
+/*
+void	sortPair(std::vector<int> &vec, int left, int right )
 {
-	
+	int				tmp;
+	if (vec[left] > vec[right])
+			tmp = vec[]
+	std::cout << " sort " << left << "-" << right << " : ";
+	std::cout << vec[left] << " " << vec[right] << std::endl;
+}
+*/
+void	pairSort(std::vector<int> &vec, int left, int right )
+{
+	int		tmp;
+
+	if (right -left == 1 && vec[left] > vec[right])
+	{
+		std::cout << "sort" << left << "<>" << right << "\n";
+		tmp = vec[right];
+		vec[right] = vec[left];
+		vec[left] = tmp;
+	}
 }
 
 void	mergeSort(std::vector<int> &vec, int left, int right)
@@ -101,13 +119,13 @@ void	mergeSort(std::vector<int> &vec, int left, int right)
 	// divide until size 2 or less 
 	if (left < right)
 	{
-		std::vector < pair <int, int> >	vip;
 		// middle point = where to divide 
 		int     mid = left + (right - left) / 2;
 		std::cout << left << "-" << mid << "  " << mid + 1 << "-" << right << std::endl;
+		pairSort(vec, left, right);
 		mergeSort(vec, left, mid);
 		mergeSort(vec, mid + 1, right);
-		sortPair(vip, vec, left, right);
+		//sortPair(vec, left, right);
 		// Merge the sorted vectors
 		//merge (vec, left, mid, right);
 	}

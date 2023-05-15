@@ -52,7 +52,7 @@ void	printTwoVectors(std::vector<int> &vec, int left, int mid, int right)
 }
 
 //void	binaryInsertSort(std::vector<int> &vec, int left, int right)
-
+// can be recursive : https://www.geeksforgeeks.org/insertion-sort/
 void		insertionSort(std::vector<int> &vec, int left, int right)
 {
 	std::vector<int>::iterator		it;
@@ -77,6 +77,21 @@ void		insertionSort(std::vector<int> &vec, int left, int right)
 	return ;
 }
 
+/* each pair is sorted */
+void	pairSort(std::vector<int> &vec, int left, int right )
+{
+	int		tmp;
+
+	if (right -left == 1 && vec[left] > vec[right])
+	{
+		//std::cout << "sort" << left << "<>" << right << "\n";
+		tmp = vec[right];
+		vec[right] = vec[left];
+		vec[left] = tmp;
+	}
+}
+
+
 void	merge(std::vector<int> &vec, int left, int right)
 {
 	// Create L ← A[p..q] and M ← A[q+1..r]
@@ -98,6 +113,7 @@ void	mergeSort(std::vector<int> &vec, int left, int right)
 		// middle point = where to divide 
 		int     mid = left + (right - left) / 2;
 		//std::cout << left << "-" << mid << "  " << mid + 1 << "-" << right << std::endl;
+		pairSort(vec, left, right);
 		mergeSort(vec, left, mid);
 		mergeSort(vec, mid + 1, right);
 		// Merge the sorted vectors
@@ -175,6 +191,8 @@ int		main(int argc, char**argv)
 
 
 /*
+./a.out `shuf -i 1-3000 -n 3000 | tr "\n" " "`
+
 merge sort hybrid not exactly Ford Johnson
 
 Time to process a range of 100 elements  with mergeSort4 :    113 microseconds.
