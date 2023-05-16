@@ -59,9 +59,9 @@ void				RPN::popTwo_calculate_push(char &c)
 
 	if (this->_mstack->size() < 2)
 		throw (RPN::OperandsMissingException());
-	long 	operand1 = static_cast< long >(this->_mstack->back());
+	long 	operand1 = this->_mstack->back();
 	this->_mstack->pop_back();
-	long 	operand2 = static_cast< long >(this->_mstack->back());
+	long 	operand2 = this->_mstack->back();
 	this->_mstack->pop_back();
 	switch (static_cast< int >(c))
 	{
@@ -83,7 +83,6 @@ void				RPN::popTwo_calculate_push(char &c)
 	default:
 		break;
 	}
-	if operans
 	this->_mstack->push_back(operand2);
 	return ;
 }
