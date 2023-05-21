@@ -135,16 +135,18 @@ void				BitcoinExchange::monetaryValue(std::string const &input_file)
 		{
 			int					date, yy, mm, dd;
 			double				assets;
+			std::string			is_bad_input_format = "Error : bad input format => " + line;
+			std::string			is_bad_input_date = "Error : bad input date   => " + line;
 
 			int		res = std::sscanf (line.c_str(), "%4d-%2d-%2d | %lf", &yy, &mm, &dd, &assets);
 			if (res != 4)
-				throw BadInputException();
+				throw std::runtime_error(is_bad_input_format);
 			date = yy * 10000 + mm * 100 + dd;
 			if (date < OLDEST_DATE)
-				throw BadInputException();
-				// ??
+				throw std::runtime_error("Error : bad input => date older than bitcoin");
+				// 				std::cerr << "Error bad input => " << line;
 			if (!checkDate(date))
-				throw BadInputException();
+				throw std::runtime_error(is_bad_input_date);
 			if (assets < 0)
 				throw NotPositiveNumberException();
 			if (assets > ASSET_MAX)
@@ -177,16 +179,17 @@ double				BitcoinExchange::searchKey(int const &date, double const &assets)
 			//this->_btc_db->erase(it);
 			return (assets * it->second);
 		}
-		if (key - (key / 100) * 100 == 1)   // day
-		{
-			if (key - (key / 10000) * 10000 == 101)   // jan01
-				key -= 8870;  // 31-dec of previous year : 20170101 --> 20161231
-			else
-				key -= 70;
-		}
-		else
-			key--;
-		i++;
+		// if (key - (key / 100) * 100 == 1)   // day
+		// {
+		// 	if (key - (key / 10000) * 10000 == 101)   // jan01
+		// 		key -= 8870;  // 31-dec of previous year : 20170101 --> 20161231
+		// 	else
+		// 		key -= 70;
+		// }
+		// else
+		// 	key--;
+		// i++;
+		i
 	}
 	return 0;
 }
@@ -212,6 +215,6 @@ const char				*BitcoinExchange::BadInputException::what() const throw()
 {
 	//std::cerr << //std::string		error_mssg = "Error : bad input => ";
 	//error_mssg += mssg;
-	return ("Error : bad input => ");
+	return ("Error : bad input format.");
 }
 

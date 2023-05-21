@@ -1,3 +1,4 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -44,6 +45,7 @@ class BitcoinExchange
 		BitcoinExchange(void);
 		~BitcoinExchange(void);
 
+		std::map<int, double>  			&getDatabase(void) const;
 		void							printDataBtc(bool full) const;
 		void							monetaryValue(std::string const &input_file);
 

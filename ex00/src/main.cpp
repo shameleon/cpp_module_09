@@ -20,16 +20,26 @@ int					main(int argc, char **argv)
 {
 	switch (argc)
 	{
+	case 1:
+		std::cout << "Argument missing : ./btc filename " << std::endl;
+		return 0;
 	case 2:
-		std::string			input_file = static_cast <std::string>(argv[1]);
-		BitcoinExchange		mbtc;
+		try
+		{
+			std::string			input_file = static_cast <std::string>(argv[1]);
+			BitcoinExchange		mbtc;
 
-		//mbtc.printDataBtc(false);
-		mbtc.monetaryValue(input_file);
+			//mbtc.printDataBtc(false);
+			mbtc.monetaryValue(input_file);			
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
 		break;
 	default:
-		std::cout << COL_AUB << "Error: could not open file" << COL_RES << std::endl;
-		break;
+		std::cout << COL_AUB << "Error : too many arguments" << COL_RES << std::endl;
+		return 1;
 	}
 	return 0;
 }
@@ -40,7 +50,7 @@ Major issues
 1 - copy constructor and operator=
 0 + test a directory as argument, chmod00 : IOT instruction ...
 1 + valgrind leaks if cannot open file
-2 - bad input exception : cout the invalid date
+2 + bad input exception : cout the invalid date
 3 - handle a date after 2022-03-29 ( how to key max )
 4 - map <const int, double>
 5 - functions like checkDate
