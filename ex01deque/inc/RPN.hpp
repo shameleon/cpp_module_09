@@ -17,6 +17,7 @@
 # include <deque>
 # include <stdexcept>
 # include "colors.hpp"
+# include <limits>  			//  std::numeric_limits
 
 enum	e_which_char
 {
@@ -78,6 +79,11 @@ class RPN
 		};
 
 		class		DivByZeroException : public std::exception
+		{
+			public:
+				virtual const char		*what(void) const throw();
+		};
+		class		IntOverflowException : public std::exception
 		{
 			public:
 				virtual const char		*what(void) const throw();

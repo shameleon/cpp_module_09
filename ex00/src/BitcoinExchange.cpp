@@ -179,17 +179,16 @@ double				BitcoinExchange::searchKey(int const &date, double const &assets)
 			//this->_btc_db->erase(it);
 			return (assets * it->second);
 		}
-		// if (key - (key / 100) * 100 == 1)   // day
-		// {
-		// 	if (key - (key / 10000) * 10000 == 101)   // jan01
-		// 		key -= 8870;  // 31-dec of previous year : 20170101 --> 20161231
-		// 	else
-		// 		key -= 70;
-		// }
-		// else
-		// 	key--;
-		// i++;
-		i
+		if (key - (key / 100) * 100 == 1)   // day
+		{
+			if (key - (key / 10000) * 10000 == 101)   // jan01
+				key -= 8870;  // 31-dec of previous year : 20170101 --> 20161231
+			else
+				key -= 70;
+		}
+		else
+			key--;
+		i++;
 	}
 	return 0;
 }

@@ -83,7 +83,11 @@ void				RPN::popTwo_calculate_push(char &c)
 	default:
 		break;
 	}
-	this->_mstack->push_back(operand2);
+	if (operand2 >= static_cast<long>(std::numeric_limits<int>::min())
+		&& operand2 <= static_cast<long>(std::numeric_limits<int>::max()))
+		this->_mstack->push_back(static_cast<int>(operand2));
+	else
+		throw (RPN::IntOverflowException());
 	return ;
 }
 
@@ -148,5 +152,10 @@ const char				*RPN::OperandsMissingException::what(void) const throw()
 const char				*RPN::DivByZeroException::what(void) const throw()
 {
 	return ("Error : Division by zero.");
+}
+
+const char				*RPN::IntOverflowException::what(void) const throw()
+{
+	return ("Error : integer overflow");
 }
 
