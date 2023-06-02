@@ -82,7 +82,7 @@ void	pairSort(std::vector<int> &vec, int left, int right )
 {
 	int		tmp;
 
-	if (right -left == 1 && vec[left] > vec[right])
+	if (right - left == 1 && vec[left] > vec[right])
 	{
 		//std::cout << "sort" << left << "<>" << right << "\n";
 		tmp = vec[right];
