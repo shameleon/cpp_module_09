@@ -5,6 +5,9 @@
 #include <ctime>
 #include <algorithm>  // sort
 
+/* binary search range size */
+# define THRESHOLD	10
+
 /* colors */
 # define COL_RED    "\e[0;31m"
 # define COL_BRED	"\e[1;31m"
@@ -42,6 +45,21 @@ void	printPairedVector(std::vector< std::pair <int, int> > &pairvec)
 	std::cout << COL_RES << std::endl;
 }
 
+int		binarySearch(int item, std::vector<int> &vec, int left, int right)
+{
+	if (right - left > THRESHOLD)
+	{
+		int		mid = left + (right - left) / 2;
+		if (item < vec[mid])
+			binarySearch(item, vec, left, mid);
+		else if (item > vec[mid])
+			binarySearch(item, vec, mid + 1, right);
+		else if (item == vec[mid])
+			return mid;
+	}
+	return left;
+}
+
 void	binarySearchInsert(std::vector<int> &elements_to_sort, std::vector<int> &vec)
 {
 	// std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std::endl;
@@ -52,6 +70,8 @@ void	binarySearchInsert(std::vector<int> &elements_to_sort, std::vector<int> &ve
 	std::vector< int> ::iterator it = vec.begin();
 	//std::cout << *it << std::endl;
 	// it != vec.end() not needed max element is already at the end
+	int	left = binarySearch(elements_to_sort.front(), vec, 0, vec.size() - 1);
+	it = it + left;
 	while (elements_to_sort.front() > *it)
 		++it;
 	//std::cout << elements_to_sort.front() << " -> " << *it << std::endl;
@@ -174,7 +194,7 @@ void	algo_sort(int argc, char**argv)
 	vecSort(vec);
 	stop = std::clock();
 	// display vector content
-	std::cout << "After : ";
+	std::cout << COL_ORANGE << "\nAfter : ";
 	printOneVector(vec, COL_BLG);
 	std::cout << std::endl;
 	delta_t_us += ( static_cast< double >(stop - start) * 1E6 ) / CLOCKS_PER_SEC;
@@ -201,12 +221,23 @@ int		main(int argc, char**argv)
 
 
 /*
+
+include 0 or not ???
+
+https://www.geeksforgeeks.org/binary-insertion-sort/
+
+
+// Compare pairs of elements and put largest elements at the front of the array
+// Sort the largest elements at the front recursively
+// Merge the rest of the array into the front, one item at a time
+
 ➜  tests git:(M17m) ✗ ./a.out 9 12 4 0 6 14 7 1 5 2 8 10 13 11 3
 Time to process a range of 15 elements :  14 microseconds
 
 
 ./a.out `shuf -i 1-3000 -n 3000 | tr "\n" " "`  
-Time to process a range of 3000 elements :  30997 microseconds.
+Time to process a range of 3000 elements :  30997 microseconds.  (without binary search)
+Time to process a range of 3000 elements :  31319 microseconds.  (with binary search)
 
 
 */
