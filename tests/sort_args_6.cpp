@@ -44,15 +44,19 @@ void	printPairedVector(std::vector< std::pair <int, int> > &pairvec)
 
 void	binarySearchInsert(std::vector<int> &left, std::vector<int> &vec)
 {
-	if (left.size())
+	//std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std::endl;
+	//printOneVector(left, COL_GRN2);
+	//printOneVector(vec, COL_VIOL);
+	if (left.size() == 0)
 		return;
-	std::vector< int> ::iterator it = vec.begin() + vec.size() / 2 ; it != vec.end(); ++it)
-	{
-
-	}
-	left.front();
-	vec.insert(left(front), vec)
-	left.erase(vec.begin());
+	std::vector< int> ::iterator it = vec.begin();
+	//std::cout << *it << std::endl;
+	// it != vec.end() not needed max element is already at the end
+	while (left.front() > *it)
+		++it;
+	//std::cout << left.front() << " -> " << *it << std::endl;
+	vec.insert(it, left.front());
+	left.erase(left.begin());
 	binarySearchInsert(left, vec);
 }
 
