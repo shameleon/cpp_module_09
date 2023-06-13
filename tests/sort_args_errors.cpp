@@ -3,7 +3,7 @@
 //#include <sstream>
 #include <vector>
 #include <limits>
-//#include <cstdlib>
+#include <cstdlib>			//std::stdtol
 #include <ctime>
 //#include <algorithm>  // sort
 
@@ -34,7 +34,7 @@ void	parse_sequence(int argc, char**argv)
 	for (int i = 1; i < argc; ++i)
 	{
 		std::string			str1 = argv[i];
-		char *pEnd;
+		char 				*pEnd;
 		long nb = std::strtol (argv[i], &pEnd, 10);
 		if (*pEnd != '\0')
 			throw std::runtime_error("Error : arguments contains non-digit characters.");
