@@ -170,7 +170,7 @@ void	algo_sort(int argc, char**argv)
 	clock_t		start, stop;
 	double		delta_t_us = 0;
 	start = std::clock();
-	// sort function
+	/************* sorting function *************/ 
 	vecSort(vec);
 	stop = std::clock();
 	// display vector content
