@@ -44,9 +44,9 @@ void	printPairedVector(std::vector< std::pair <int, int> > &pairvec)
 
 void	binarySearchInsert(std::vector<int> &left, std::vector<int> &vec)
 {
-	//std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std::endl;
-	//printOneVector(left, COL_GRN2);
-	//printOneVector(vec, COL_VIOL);
+	// std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std::endl;
+	// printOneVector(left, COL_GRN2);
+	// printOneVector(vec, COL_VIOL);
 	if (left.size() == 0)
 		return;
 	std::vector< int> ::iterator it = vec.begin();
@@ -63,7 +63,6 @@ void	binarySearchInsert(std::vector<int> &left, std::vector<int> &vec)
 void	pushRightElements(std::vector<int> &left, std::vector<int> &vec,
 								std::vector< std::pair<int, int> > &pairvec)
 {
-	// erase vect
 	std::vector< std::pair<int, int> >::iterator	it = pairvec.begin();
 
 	vec.push_back(it->first);
@@ -90,6 +89,7 @@ void	sortPairsByRightElement(std::vector< std::pair<int, int> > &sortvec,
 		sortvec.push_back(std::make_pair(min_right_element->first, min_right_element->second));
 		pairvec.erase(min_right_element);
 		sortPairsByRightElement(sortvec, pairvec);
+
 	}
 }
 
@@ -126,11 +126,15 @@ void	vecSort(std::vector<int> &vec)
 	std::vector<int>					left;
 	
 	groupElementsBySortedPairs(vec, pairvec, ending_singleton);
-	printPairedVector(pairvec);
+	//printPairedVector(pairvec);
 	sortPairsByRightElement(sortvec, pairvec);
-	printPairedVector(sortvec);
+	//printPairedVector(sortvec);
 	pushRightElements(left, vec, sortvec);
-	left.push_back(ending_singleton[0]);
+	if (ending_singleton.size())
+		left.push_back(ending_singleton[0]);
+	//std::cout << "# # # # # # # # # # # # # # " << std::endl;
+	//printOneVector(left, COL_GRN2);
+	//printOneVector(vec, COL_VIOL);
 	binarySearchInsert(left, vec);
 }
 
@@ -171,8 +175,7 @@ void	algo_sort(int argc, char**argv)
 	stop = std::clock();
 	// display vector content
 	std::cout << "After : ";
-	for (std::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it)
-		std::cout << *it << " ";
+	printOneVector(vec, COL_BLG);
 	std::cout << std::endl;
 	delta_t_us += ( static_cast< double >(stop - start) * 1E6 ) / CLOCKS_PER_SEC;
 	std::cout << COL_ORANGE << "Time to process a range of " << (argc - 1) << " elements :  ";
@@ -195,3 +198,15 @@ int		main(int argc, char**argv)
 	}
 	return 0;
 }
+
+
+/*
+➜  tests git:(M17m) ✗ ./a.out 9 12 4 0 6 14 7 1 5 2 8 10 13 11 3
+Time to process a range of 15 elements :  14 microseconds
+
+
+./a.out `shuf -i 1-3000 -n 3000 | tr "\n" " "`  
+Time to process a range of 3000 elements :  30997 microseconds.
+
+
+*/
