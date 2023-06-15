@@ -21,13 +21,22 @@ int					main(int argc, char **argv)
 	switch (argc)
 	{
 	case 1:
-		std::cerr << COL_BRED << "Error : arguments missing" << COL_RES << std::endl;
+		std::cerr << COL_BRED << "Error : arguments missing. No positive integer arguments to sort" << COL_RES << std::endl;
 		break;
 	case 2:
-		std::cout << argv[1] << std::endl;
-		return 0;
+		std::cerr << COL_BRED << "Error : only a one-integer argument was provided, nothing to be sorted" << COL_RES << std::endl;
+		break;
 	default:
-		PmergeMe		pmerge(argc, argv);
+		try
+		{
+			PmergeMe		pmerge(argc, argv);
+			pmerge.timedSort();
+		}
+		catch(const std::exception &e)
+		{
+			std::cerr << COL_BRED << e.what() << COL_RES << std::endl;
+			
+		}
 		break;
 	}
 	return 0;
