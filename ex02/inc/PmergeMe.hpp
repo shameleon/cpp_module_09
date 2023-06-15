@@ -15,10 +15,11 @@
 
 # include <iostream>
 # include <vector>
-# include <limits>
-# include <cstdlib>
+# include <list>
+# include <limits>			// std::numeric_limits<int>::max()
+# include <cstdlib>			// std::strtol()
 # include <ctime>
-# include <algorithm>  // sort
+# include <algorithm>  		// sort
 # include <stdexcept>
 # include "colors.hpp"
 
@@ -27,6 +28,7 @@ class PmergeMe
 	private:
 		int						_argc;
 		std::vector<int>		*_pvec;
+		std::list<int>			*_plist;
 
 
 		PmergeMe(void);
@@ -38,7 +40,9 @@ class PmergeMe
 
 	public:
 		PmergeMe(int argc, char **argv);
-		~PmergeMe(void);
+		virtual ~PmergeMe(void);
+
+		void					timedSort(void);
 
 		class		PmergeMeErrorException : public std::exception
 		{
