@@ -13,15 +13,20 @@
 #ifndef PMERGEME_HPP
 # define PMERGEME_HPP
 
+# define OUTPUT_VECTOR_CONTENT	1
+# define OUTPUT_LIST_CONTENT	0
+/* binary search range size */
+# define THRESHOLD		10
+
 # include <iostream>
-# include <vector>
-# include <list>
+# include <vector>			// std::vector
+# include <list>			// std::list
 # include <limits>			// std::numeric_limits<int>::max()
 # include <cstdlib>			// std::strtol()
-# include <ctime>
-# include <algorithm>  		// sort
-# include <stdexcept>
-# include "colors.hpp"
+# include <ctime>			// std::clock
+# include <algorithm>  		// std::sort (not used)
+# include <stdexcept>		// std::exception
+# include "colors.hpp"		// colors for std::cout
 
 class PmergeMe
 {
@@ -35,8 +40,33 @@ class PmergeMe
 		PmergeMe(PmergeMe &other);
 		PmergeMe				&operator=(PmergeMe &rhs);
 
-		void					autosort(void);
-		void					sort(void);
+		/* vector sorted with Ford-Johnson*/
+		int						binarySearch(int item, std::vector<int> &vec, int left, int right);
+		void					binarySearchInsert(std::vector<int> &elements_to_sort);
+		void					pushRightElements(std::vector<int> &elements_to_sort,
+													std::vector< std::pair<int, int> > &pairvec);
+		void					sortPairsByRightElement(std::vector< std::pair<int, int> > &sortvec,
+														std::vector< std::pair<int, int> > &pairvec);
+		void					groupElementsBySortedPairs( std::vector< std::pair<int, int> > &pairvec,
+															std::vector<int> &ending_singleton);
+		void					vecSort(void);
+		
+		/* list sorted with Ford-Johnson*/
+		void					binarySearchInsert(std::list<int> &elements_to_sort, std::list<int> &lst);
+		void					pushRightElements(std::list<int> &elements_to_sort, std::list<int> &lst,
+													std::list< std::pair<int, int> > &pairlst);
+		void					sortPairsByRightElement(std::list< std::pair<int, int> > &sortlst,
+														std::list< std::pair<int, int> > &pairlst);
+		void					groupElementsBySortedPairs(std::list<int> &lst,
+															std::list< std::pair<int, int> > &pairlst,
+															std::list<int> &ending_singleton);
+		void					listSort(std::list<int> &lst);
+
+
+		void					printVector(std::string color);
+		void					printList(std::string color);
+		void					timedSortVector(void);
+		void					timedSortList(void);
 
 	public:
 		PmergeMe(int argc, char **argv);
@@ -44,7 +74,22 @@ class PmergeMe
 
 		void					timedSort(void);
 
-		class		PmergeMeErrorException : public std::exception
+		class		DefaultConstructorErrorException : public std::exception
+		{
+			public:
+				virtual const char		*what(void) const throw();
+		};
+		class		NonDigitCharException : public std::exception
+		{
+			public:
+				virtual const char		*what(void) const throw();
+		};
+		class		IntegerOverflowException : public std::exception
+		{
+			public:
+				virtual const char		*what(void) const throw();
+		};
+		class		NegativeNumberException : public std::exception
 		{
 			public:
 				virtual const char		*what(void) const throw();
