@@ -43,10 +43,8 @@ int					main(int argc, char **argv)
 }
 
 /*
-issues :
-1- constructor by copy and copy assignement operator=
-2 - if (ln < int_min || ln > int_max)
-throw exception 
+./PmergeMe `shuf -i 1-3000 -n 3000 | tr "\n" " "`
+
 Subject
 The name of the program is PmergeMe.
 • Your program must be able to use a positive integer sequence as argument.
@@ -59,4 +57,5 @@ validate this exercise. Your program must be able to handle at
 least 3000 different integers.
 It is strongly advised to implement your algorithm for each container
 and thus to avoid using a generic function.
+
 */

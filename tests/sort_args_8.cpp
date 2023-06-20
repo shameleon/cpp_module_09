@@ -46,7 +46,7 @@ void	printPairedList(std::list< std::pair <int, int> > &pairlst)
 	std::cout << COL_RES << std::endl;
 }
 
-// no subcript oveload for lists Random access of elements not possible.
+// no subcript overload for lists Random access of elements not possible.
 // as list is implemented as a double liked-list (access by traversing through iterators) 
 /*
 int		binarySearch(int item, std::list<int> &lst, int left, int right)

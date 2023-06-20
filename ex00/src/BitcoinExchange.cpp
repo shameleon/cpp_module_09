@@ -144,7 +144,6 @@ void				BitcoinExchange::monetaryValue(std::string const &input_file)
 			date = yy * 10000 + mm * 100 + dd;
 			if (date < OLDEST_DATE)
 				throw std::runtime_error("Error : bad input => date older than bitcoin");
-				// 				std::cerr << "Error bad input => " << line;
 			if (!checkDate(date))
 				throw std::runtime_error(is_bad_input_date);
 			if (assets < 0)
@@ -195,8 +194,6 @@ double				BitcoinExchange::searchKey(int const &date, double const &assets)
 
 const char				*BitcoinExchange::InvalidFileException::what() const throw()
 {
-	//std::cerr << //std::string		error_mssg = "Error : bad input => ";
-	//error_mssg += mssg;
 	return ("Error : could not open input file.");
 }
 
@@ -212,8 +209,6 @@ const char				*BitcoinExchange::ToolargeNumberException::what(void) const throw(
 
 const char				*BitcoinExchange::BadInputException::what() const throw()
 {
-	//std::cerr << //std::string		error_mssg = "Error : bad input => ";
-	//error_mssg += mssg;
 	return ("Error : bad input format.");
 }
 
