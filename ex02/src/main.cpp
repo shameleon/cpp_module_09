@@ -43,6 +43,12 @@ int					main(int argc, char **argv)
 }
 
 /*
+issues:
+1- copy 
+2- vector fucntions take &vec as param
+3- delete throw exception in a exit function
+4- textfile of merge insert sort.
+
 ./PmergeMe `shuf -i 1-3000 -n 3000 | tr "\n" " "`
 
 Subject
