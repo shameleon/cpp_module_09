@@ -13,6 +13,9 @@
 #ifndef PMERGEME_HPP
 # define PMERGEME_HPP
 
+/* binary search range size */
+# define THRESHOLD	10
+
 # include <iostream>
 # include <vector>
 # include <list>
@@ -35,8 +38,24 @@ class PmergeMe
 		PmergeMe(PmergeMe &other);
 		PmergeMe				&operator=(PmergeMe &rhs);
 
-		void					autosort(void);
-		void					sort(void);
+		/* vector sorted with Ford-Johnson*/
+		int						binarySearch(int item, std::vector<int> &vec, int left, int right);
+		void					binarySearchInsert(std::vector<int> &elements_to_sort);
+		void					pushRightElements(std::vector<int> &elements_to_sort,
+													std::vector< std::pair<int, int> > &pairvec);
+		void					sortPairsByRightElement(std::vector< std::pair<int, int> > &sortvec,
+														std::vector< std::pair<int, int> > &pairvec);
+		void					groupElementsBySortedPairs( std::vector< std::pair<int, int> > &pairvec,
+															std::vector<int> &ending_singleton);
+		void					vecSort(void);
+		
+		/* list sorted with Ford-Johnson*/
+		void					listSort(void);
+
+		void					printVector(std::string color);
+		//void					autosort(void);
+		void					timedSortVector(void);
+		void					timedSortList(void);
 
 	public:
 		PmergeMe(int argc, char **argv);
