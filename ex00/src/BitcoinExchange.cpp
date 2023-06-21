@@ -38,21 +38,6 @@ BitcoinExchange				&BitcoinExchange::operator=(BitcoinExchange &rhs)
 	return *this;
 }
 
-void						BitcoinExchange::printDataBtc(bool full) const
-{
-	std::cout << "DB size : " << this->_btc_db->size() << " entries" << std::endl;
-	if (!full)
-		return ;
-	std::cout.precision(2);
-	std::cout << std::setiosflags(std::ios::fixed);
-	for (std::map< int, double>::iterator it = this->_btc_db->begin();
-			it != this->_btc_db->end(); ++it)
-	{
-		std::cout << COL_VIOL << it->first << " : ";
-		std::cout << COL_ORANGE << it->second << COL_RES << std::endl;
-	}
-}
-
 bool						BitcoinExchange::checkDate(int const date)
 {
 	int		yy = date / 10000;
@@ -68,6 +53,35 @@ bool						BitcoinExchange::checkDate(int const date)
 	return true;
 }
 
+double				BitcoinExchange::searchKey(int const &date, double const &assets)
+{
+	int									key = date;
+	bool								found = false;
+	int									i = 0;
+	std::map<int, double>::iterator		it;
+
+	while (!found && key >= OLDEST_DATE && i < 5)
+	{
+		it = this->_btc_db->find(key);
+		if (it != this->_btc_db->end())
+		{
+			found = true;
+			//this->_btc_db->erase(it);
+			return (assets * it->second);
+		}
+		if (key - (key / 100) * 100 == 1)   // day
+		{
+			if (key - (key / 10000) * 10000 == 101)   // jan01
+				key -= 8870;  // 31-dec of previous year : 20170101 --> 20161231
+			else
+				key -= 70;
+		}
+		else
+			key--;
+		i++;
+	}
+	return 0;
+}
 
 bool						BitcoinExchange::loadDataBase(void)
 {
@@ -81,7 +95,7 @@ bool						BitcoinExchange::loadDataBase(void)
 			throw std::runtime_error("Error : could not open data file.");
 		std::getline(ifs, line);
 		if (line.compare("date,exchange_rate") != 0)
-			throw std::runtime_error("Error : invalid header line in data file.");
+			throw std::runtime_error("Error : invalid data file.");
 		while (ifs.good() && std::getline(ifs, line))
 		{
 			int			date, yy, mm, dd;
@@ -93,7 +107,6 @@ bool						BitcoinExchange::loadDataBase(void)
 			date = yy * 10000 + mm * 100 + dd;
 			if (checkDate(date))
 				this->_btc_db->insert(std::pair<int, double>(date, value));
-				//this->_btc_db[date] = value;
 			else
 				throw std::runtime_error("Error : date out of range");
 		} 
@@ -107,9 +120,24 @@ bool						BitcoinExchange::loadDataBase(void)
 	return false;
 }
 
-/* 
-public 
- */
+/* public */
+void						BitcoinExchange::printDataBtc(bool full_report) const
+{
+	std::cout << COL_AUB << "Bitcoin DB size : " << this->_btc_db->size() << " entries\n";
+	if (full_report)
+	{
+		std::cout.precision(2);
+		std::cout << std::setiosflags(std::ios::fixed);
+		for (std::map< int, double>::iterator it = this->_btc_db->begin();
+				it != this->_btc_db->end(); ++it)
+		{
+			std::cout << COL_VIOL << it->first << " : ";
+			std::cout << COL_ORANGE << it->second << COL_RES << std::endl;
+		}
+	}
+	std::cout << COL_RES<< std::endl;
+}
+
 void				BitcoinExchange::monetaryValue(std::string const &input_file)
 {
 	std::ifstream			ifs(input_file.c_str());
@@ -123,7 +151,7 @@ void				BitcoinExchange::monetaryValue(std::string const &input_file)
 			throw InvalidFileException();
 		std::getline(ifs, line);
 		if (line.compare("date | value") != 0)
-			throw std::runtime_error("Error : invalid header line in input file.");
+			throw std::runtime_error("Error : invalid input file. Header missing.");
 	}
 	catch(const std::exception &e)
 	{
@@ -160,36 +188,6 @@ void				BitcoinExchange::monetaryValue(std::string const &input_file)
 	}
 	ifs.close();
 	return ;
-}
-
-double				BitcoinExchange::searchKey(int const &date, double const &assets)
-{
-	int									key = date;
-	bool								found = false;
-	int									i = 0;
-	std::map<int, double>::iterator		it;
-
-	while (!found && key >= OLDEST_DATE && i < 5)
-	{
-		it = this->_btc_db->find(key);
-		if (it != this->_btc_db->end())
-		{
-			found = true;
-			//this->_btc_db->erase(it);
-			return (assets * it->second);
-		}
-		if (key - (key / 100) * 100 == 1)   // day
-		{
-			if (key - (key / 10000) * 10000 == 101)   // jan01
-				key -= 8870;  // 31-dec of previous year : 20170101 --> 20161231
-			else
-				key -= 70;
-		}
-		else
-			key--;
-		i++;
-	}
-	return 0;
 }
 
 const char				*BitcoinExchange::InvalidFileException::what() const throw()

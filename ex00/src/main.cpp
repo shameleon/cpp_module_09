@@ -20,26 +20,26 @@ int					main(int argc, char **argv)
 {
 	switch (argc)
 	{
-	case 1:
-		std::cout << "Argument missing : ./btc filename " << std::endl;
-		return 0;
-	case 2:
-		try
-		{
-			std::string			input_file = static_cast <std::string>(argv[1]);
-			BitcoinExchange		mbtc;
+		case 1:
+			std::cout << COL_LRED << "Argument missing : ./btc filename " << COL_RES << std::endl;
+			return 0;
+		case 2:
+			try
+			{
+				std::string			input_file = static_cast <std::string>(argv[1]);
+				BitcoinExchange		mbtc;
 
-			//mbtc.printDataBtc(false);
-			mbtc.monetaryValue(input_file);			
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << e.what() << '\n';
-		}
-		break;
-	default:
-		std::cout << COL_AUB << "Error : too many arguments" << COL_RES << std::endl;
-		return 1;
+				mbtc.printDataBtc(0);
+				mbtc.monetaryValue(input_file);			
+			}
+			catch(const std::exception& e)
+			{
+				std::cerr << e.what() << '\n';
+			}
+			break;
+		default:
+			std::cout << COL_LRED << "Error : too many arguments" << COL_RES << std::endl;
+			return 1;
 	}
 	return 0;
 }

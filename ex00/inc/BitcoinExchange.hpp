@@ -14,9 +14,9 @@
 #ifndef BITCOINEXCHANGE_HPP
 # define BITCOINEXCHANGE_HPP
 
-# define BITCOIN_DATABASE "../cpp_09_tgz/data.csv"
-# define OLDEST_DATE 20090102
-# define ASSET_MAX 1000
+# define BITCOIN_DATABASE	"../cpp_09/data.csv"
+# define OLDEST_DATE		20090102
+# define ASSET_MAX 			1000
 
 # include <map>
 # include <iterator>
@@ -38,14 +38,14 @@ class BitcoinExchange
 		BitcoinExchange					&operator=(BitcoinExchange &rhs);
 
 		bool							checkDate(int const date);
-		bool							loadDataBase(void);
 		double							searchKey(int const &date, double const &assets);
-		
+		bool							loadDataBase(void);
+
 	public:
 		BitcoinExchange(void);
 		~BitcoinExchange(void);
 
-		std::map<int, double>  			&getDatabase(void) const;
+		//std::map<int, double>  			&getDatabase(void) const;
 		void							printDataBtc(bool full) const;
 		void							monetaryValue(std::string const &input_file);
 
