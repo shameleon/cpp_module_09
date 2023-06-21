@@ -16,10 +16,10 @@
 
 # define BITCOIN_DATABASE	"./cpp_09/data.csv"
 # define OLDEST_DATE		20090102
+# define ASSET_MIN 			0
 # define ASSET_MAX 			1000
 
 # include <map>
-# include <iterator>
 # include <iostream>			// std::cout
 # include <iomanip>				// std::setiosflags std::setprecision
 # include <fstream>				// std::ifstream

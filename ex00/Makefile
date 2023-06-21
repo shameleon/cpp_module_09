@@ -44,7 +44,7 @@ DEPFLAGS	= -MMD -MP -MF $(DEP_DIR)$*.d
 DATA_DIR		= "./cpp_09"
 INTRA42_LINK	= "https://cdn.intra.42.fr/document/document/17265/cpp_09.tgz" 
 TGZ_FILE		= "./cpp_09.tgz"
-INPUT_DATA		= "date | value\n2011-01-03 | 3\n2011-01-03 | 2\n2011-01-03 | 1n\2011-01-03 | 1.2n\2011-01-09 | 1\n2012-01-11 | -1\n2001-42-42\n2012-01-11 | 1\n2012-01-11 | 2147483648\n2008-12-14 | 1.42\n2022-12-14 | 3.21\n2018/02-03 | 1\n2018-02-30 | 1\n2018-02-03 | 0\n2018-02-03 | 1002\n2022-03-29 | 0.1\n2022-04-01 | 0.1\n2022-04-03 | 0.1"
+INPUT_DATA		= "date | value\n2011-01-03 | 3\n2011-01-03 | 2\n2011-01-03 | 1\n2011-01-03 | 1.2\n2011-01-09 | 1\n2012-01-11 | -1\n2001-42-42\n2012-01-11 | 1\n2012-01-11 | 2147483648\n2008-12-14 | 1.42\n2022-12-14 | 3.21\n2018/02-03 | 1\n2018-02-30 | 1\n2018-02-03 | 0\n2018-02-03 | 1002\n2022-03-29 | 0.1\n2022-04-01 | 0.1\n2022-04-03 | 0.1"
 INPUT_FILE		= ${DATA_DIR}/input.txt
 
 ############################
@@ -57,6 +57,8 @@ $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) $(CFLAGS) $(OBJ) -o $(NAME) 
 	$(COL_GRN)
 	@echo "./$(NAME) executable is ready !"
+	$(COL_BLU)
+	@echo "use 'make data' command to fetch data files"
 	$(COL_RESET)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp

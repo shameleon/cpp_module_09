@@ -56,19 +56,14 @@ bool						BitcoinExchange::checkDate(int const date)
 double				BitcoinExchange::searchKey(int const &date, double const &assets)
 {
 	int									key = date;
-	bool								found = false;
 	int									i = 0;
 	std::map<int, double>::iterator		it;
 
-	while (!found && key >= OLDEST_DATE && i < 5)
+	while (key >= OLDEST_DATE && i < 7)
 	{
 		it = this->_btc_db->find(key);
 		if (it != this->_btc_db->end())
-		{
-			found = true;
-			//this->_btc_db->erase(it);
 			return (assets * it->second);
-		}
 		if (key - (key / 100) * 100 == 1)   // day
 		{
 			if (key - (key / 10000) * 10000 == 101)   // jan01
@@ -174,7 +169,7 @@ void				BitcoinExchange::monetaryValue(std::string const &input_file)
 				throw std::runtime_error("Error : bad input => date older than bitcoin");
 			if (!checkDate(date))
 				throw std::runtime_error(is_bad_input_date);
-			if (assets < 0)
+			if (assets < ASSET_MIN)
 				throw NotPositiveNumberException();
 			if (assets > ASSET_MAX)
 				throw ToolargeNumberException();
