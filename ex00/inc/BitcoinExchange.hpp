@@ -14,7 +14,7 @@
 #ifndef BITCOINEXCHANGE_HPP
 # define BITCOINEXCHANGE_HPP
 
-# define BITCOIN_DATABASE	"../cpp_09/data.csv"
+# define BITCOIN_DATABASE	"./cpp_09/data.csv"
 # define OLDEST_DATE		20090102
 # define ASSET_MAX 			1000
 

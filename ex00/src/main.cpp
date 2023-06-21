@@ -96,4 +96,37 @@ Unique keys
     No two elements in the container can have equivalent keys.
 Allocator-aware
     The container uses an allocator object to dynamically handle its storage needs. 
+
+input.txt
+
+date | value
+2011-01-03 | 3
+2011-01-03 | 2
+2011-01-03 | 1
+2011-01-03 | 1.2
+2011-01-09 | 1
+2012-01-11 | -1
+2001-42-42
+2012-01-11 | 1
+2012-01-11 | 2147483648
+2008-12-14 | 1.42
+2022-12-14 | 3.21
+2018/02-03 | 1
+2018-02-30 | 1
+2018-02-03 | 0
+2018-02-03 | 1002
+2022-03-29 | 0.1
+2022-04-01 | 0.1
+2022-04-03 | 0.1
+
+echo "date | value\n2011-01-03 | 3\n2011-01-03 | 2\n2011-01-03 | 1n\2011-01-03 | 1.2n\2011-01-09 | 1\n2012-01-11 | -1\n2001-42-42\n2012-01-11 | 1\n2012-01-11 | 2147483648\n2008-12-14 | 1.42\n2022-12-14 | 3.21\n2018/02-03 | 1\n2018-02-30 | 1\n2018-02-03 | 0\n2018-02-03 | 1002\n2022-03-29 | 0.1\n2022-04-01 | 0.1\n2022-04-03 | 0.1" > ./cpp_09/input.txt
+
+
+	@if [ ! -d $(DATA_DIR) ]; then \
+		wget $(INTRA42_LINK); \
+		tar -xvzf $(TGZ_FILE); \
+		rm -rf $(TGZ_FILE); \
+		echo $(INPUT_DATA) > $(INPUT_FILE); \
+		echo "cpp_09/input.txt"; \
+		fi	
 */
