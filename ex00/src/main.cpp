@@ -30,7 +30,7 @@ int					main(int argc, char **argv)
 				BitcoinExchange		mbtc;
 
 				mbtc.printDataBtc(0);
-				mbtc.monetaryValue(input_file);			
+				mbtc.showMonetaryValues(input_file);			
 			}
 			catch(const std::exception& e)
 			{

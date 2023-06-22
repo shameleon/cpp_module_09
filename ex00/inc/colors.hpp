@@ -31,6 +31,3 @@
 # define COL_RES	"\e[0m"
 
 #endif
-
-/* 
-*/

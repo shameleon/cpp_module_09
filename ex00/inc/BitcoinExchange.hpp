@@ -16,10 +16,11 @@
 
 # define BITCOIN_DATABASE	"./cpp_09/data.csv"
 # define OLDEST_DATE		20090102
+# define WEEKDAYS 			7
 # define ASSET_MIN 			0
 # define ASSET_MAX 			1000
 
-# include <map>
+# include <map>					// std::map
 # include <iostream>			// std::cout
 # include <iomanip>				// std::setiosflags std::setprecision
 # include <fstream>				// std::ifstream
@@ -38,16 +39,15 @@ class BitcoinExchange
 		BitcoinExchange					&operator=(BitcoinExchange &rhs);
 
 		bool							checkDate(int const date);
-		double							searchKey(int const &date, double const &assets);
+		double							getMonetaryValue(int const &date, double const &assets);
 		bool							loadDataBase(void);
 
 	public:
 		BitcoinExchange(void);
 		~BitcoinExchange(void);
 
-		//std::map<int, double>  			&getDatabase(void) const;
 		void							printDataBtc(bool full) const;
-		void							monetaryValue(std::string const &input_file);
+		void							showMonetaryValues(std::string const &input_file);
 
 		class		InvalidFileException : public std::exception
 		{

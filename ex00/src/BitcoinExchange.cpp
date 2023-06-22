@@ -53,13 +53,18 @@ bool						BitcoinExchange::checkDate(int const date)
 	return true;
 }
 
-double				BitcoinExchange::searchKey(int const &date, double const &assets)
+double				BitcoinExchange::getMonetaryValue(int const &date, double const &assets)
 {
 	int									key = date;
 	int									i = 0;
-	std::map<int, double>::iterator		it;
+	std::map<int, double>::iterator		it, last;
 
-	while (key >= OLDEST_DATE && i < 7)
+	last = this->_btc_db->end();
+	--last;
+	if (date >= last->first)
+		return (assets * last->second);
+	if (date >= getLastBtcRate())
+	while (i < WEEKDAYS && key >= OLDEST_DATE)
 	{
 		it = this->_btc_db->find(key);
 		if (it != this->_btc_db->end())
@@ -75,7 +80,7 @@ double				BitcoinExchange::searchKey(int const &date, double const &assets)
 			key--;
 		i++;
 	}
-	return 0;
+	return (-1);
 }
 
 bool						BitcoinExchange::loadDataBase(void)
@@ -115,7 +120,7 @@ bool						BitcoinExchange::loadDataBase(void)
 	return false;
 }
 
-/* public */
+/* ****** public ****** */
 void						BitcoinExchange::printDataBtc(bool full_report) const
 {
 	std::cout << COL_AUB << "Bitcoin DB size : " << this->_btc_db->size() << " entries\n";
@@ -133,7 +138,7 @@ void						BitcoinExchange::printDataBtc(bool full_report) const
 	std::cout << COL_RES<< std::endl;
 }
 
-void				BitcoinExchange::monetaryValue(std::string const &input_file)
+void				BitcoinExchange::showMonetaryValues(std::string const &input_file)
 {
 	std::ifstream			ifs(input_file.c_str());
 	std::string				line;
@@ -157,7 +162,7 @@ void				BitcoinExchange::monetaryValue(std::string const &input_file)
 		try
 		{
 			int					date, yy, mm, dd;
-			double				assets;
+			double				assets, monetary_value;
 			std::string			is_bad_input_format = "Error : bad input format => " + line;
 			std::string			is_bad_input_date = "Error : bad input date   => " + line;
 
@@ -174,7 +179,11 @@ void				BitcoinExchange::monetaryValue(std::string const &input_file)
 			if (assets > ASSET_MAX)
 				throw ToolargeNumberException();
 			std::cout << COL_BGRN << line << COL_RES << " => ";
-			std::cout << COL_ORANGE << searchKey(date, assets) << COL_RES<< std::endl;
+			monetary_value = getMonetaryValue(date, assets);
+			if (monetary_value == -1)
+				throw std::runtime_error("Error : bad input => date older than bitcoin");
+			else
+				std::cout << COL_ORANGE << monetary_value << COL_RES<< std::endl;
 		}
 		catch(const std::exception &e)
 		{
