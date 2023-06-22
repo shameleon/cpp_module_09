@@ -25,6 +25,7 @@ BitcoinExchange::BitcoinExchange(BitcoinExchange &other)
 	return ;
 }
 
+
 BitcoinExchange::~BitcoinExchange(void)
 {
 	if (this->_btc_db)
@@ -34,8 +35,17 @@ BitcoinExchange::~BitcoinExchange(void)
 
 BitcoinExchange				&BitcoinExchange::operator=(BitcoinExchange &rhs)
 {
-	(static_cast< void >(rhs));
+	//(static_cast< void >(rhs));
+	if (this->_btc_db)
+		delete this->_btc_db;
+	this->_btc_db = new std::map<int, double>;
+	this->_btc_db = rhs.getBtcDatabase();
 	return *this;
+}
+
+std::map<int, double>		*BitcoinExchange::getBtcDatabase(void)
+{
+    return this->_btc_db;
 }
 
 bool						BitcoinExchange::checkDate(int const date)
@@ -53,35 +63,31 @@ bool						BitcoinExchange::checkDate(int const date)
 	return true;
 }
 
-double				BitcoinExchange::getMonetaryValue(int const &date, double const &assets)
+void				BitcoinExchange::showBtcMonetaryValue(int const &date, double const &assets)
 {
 	int									key = date;
-	int									i = 0;
-	std::map<int, double>::iterator		it, last;
-
-	last = this->_btc_db->end();
-	--last;
-	if (date >= last->first)
-		return (assets * last->second);
-	if (date >= getLastBtcRate())
-	while (i < WEEKDAYS && key >= OLDEST_DATE)
+	std::map<int, double>::iterator		it;
+	
+	while (key >= OLDEST_DATE)
 	{
 		it = this->_btc_db->find(key);
 		if (it != this->_btc_db->end())
-			return (assets * it->second);
-		if (key - (key / 100) * 100 == 1)   // day
 		{
-			if (key - (key / 10000) * 10000 == 101)   // jan01
-				key -= 8870;  // 31-dec of previous year : 20170101 --> 20161231
+			std::cout << COL_ORANGE << assets * it->second << COL_RES << std::endl;
+			return ;
+		}
+		if (key - (key / 100) * 100 == 1)
+		{
+			if (key - (key / 10000) * 10000 == 101)		// jan01
+				key -= 8870;  							// 31-dec of previous year : 20170101 --> 20161231
 			else
 				key -= 70;
 		}
 		else
 			key--;
-		i++;
 	}
-	return (-1);
 }
+
 
 bool						BitcoinExchange::loadDataBase(void)
 {
@@ -120,7 +126,6 @@ bool						BitcoinExchange::loadDataBase(void)
 	return false;
 }
 
-/* ****** public ****** */
 void						BitcoinExchange::printDataBtc(bool full_report) const
 {
 	std::cout << COL_AUB << "Bitcoin DB size : " << this->_btc_db->size() << " entries\n";
@@ -162,7 +167,7 @@ void				BitcoinExchange::showMonetaryValues(std::string const &input_file)
 		try
 		{
 			int					date, yy, mm, dd;
-			double				assets, monetary_value;
+			double				assets;
 			std::string			is_bad_input_format = "Error : bad input format => " + line;
 			std::string			is_bad_input_date = "Error : bad input date   => " + line;
 
@@ -179,11 +184,7 @@ void				BitcoinExchange::showMonetaryValues(std::string const &input_file)
 			if (assets > ASSET_MAX)
 				throw ToolargeNumberException();
 			std::cout << COL_BGRN << line << COL_RES << " => ";
-			monetary_value = getMonetaryValue(date, assets);
-			if (monetary_value == -1)
-				throw std::runtime_error("Error : bad input => date older than bitcoin");
-			else
-				std::cout << COL_ORANGE << monetary_value << COL_RES<< std::endl;
+			showBtcMonetaryValue(date, assets);
 		}
 		catch(const std::exception &e)
 		{

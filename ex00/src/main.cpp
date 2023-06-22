@@ -22,7 +22,7 @@ int					main(int argc, char **argv)
 	{
 		case 1:
 			std::cout << COL_LRED << "Argument missing : ./btc filename " << COL_RES << std::endl;
-			return 0;
+			return 1;
 		case 2:
 			try
 			{
