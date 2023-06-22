@@ -50,7 +50,8 @@ Issues :
 2- necessary space before operator ? unecessary befor digit ?
 "En fait RPN est censé fonctionner sans espace en ayant les opérandes et les opérateurs collés, du coup ça implique qu'on n'a pas à gérer les négatifs"
 Ben si le - est collé au chiffre c’est négatif, si il y a un espace c’est opérande
-Je viens de me faire corriger sur le CPP09 et j'ai fail car sur un test de la correction, je refusais pour faute de syntaxte  ./RPN "12 * 2 / 5 + 46 * 6 / 8 * 2 / + 2 *2" 
+Je viens de me faire corriger sur le CPP09 et j'ai fail car sur un test de la correction, 
+je refusais pour faute de syntaxte  ./RPN "12 * 2 / 5 + 46 * 6 / 8 * 2 / + 2 *2" 
 On est sense l'accepter avec le / et le + qui se suivent a la fin ?
 
 3- static ? static class ? whichInputChar 
