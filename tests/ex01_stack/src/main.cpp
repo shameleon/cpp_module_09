@@ -13,7 +13,7 @@
 #include "../inc/RPN.hpp"
 
 /* *********************** */
-/*  Ex01  RPN              */
+/*  Ex01  RNP              */
 /* *********************** */
 
 int					main(int argc, char **argv)
@@ -29,7 +29,7 @@ int					main(int argc, char **argv)
 			{
 				to_stack.calculator();
 			}
-			catch(const std::exception &e)
+			catch(const RPN::RPNErrorException  &e)
 			{
 				std::cerr << COL_BRED << e.what() << COL_RES << std::endl;
 				

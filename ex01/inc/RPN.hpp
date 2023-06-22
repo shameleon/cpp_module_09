@@ -14,9 +14,10 @@
 # define RPN_HPP
 
 # include <iostream>
-# include <stack>
+# include <deque>
 # include <stdexcept>
 # include "colors.hpp"
+# include <limits>
 
 enum	e_which_char
 {
@@ -37,7 +38,7 @@ enum	e_operation
 class RPN
 {
 	private:
-		std::stack<int>			*_mstack;
+		std::deque<int>			*_mstack;
 		std::string				_input;
 
 		RPN(void);
@@ -53,7 +54,36 @@ class RPN
 
 		void					calculator(void);
 
-		class		RPNErrorException : public std::exception
+		class		MissingSpaceErrorException : public std::exception
+		{
+			public:
+				virtual const char		*what(void) const throw();
+		};
+
+		class		InvalidCharacterException : public std::exception
+		{
+			public:
+				virtual const char		*what(void) const throw();
+		};
+
+		class		OperatorsMissingException : public std::exception
+		{
+			public:
+				virtual const char		*what(void) const throw();
+		};
+
+		class		OperandsMissingException : public std::exception
+		{
+			public:
+				virtual const char		*what(void) const throw();
+		};
+
+		class		DivByZeroException : public std::exception
+		{
+			public:
+				virtual const char		*what(void) const throw();
+		};
+		class		IntOverflowException : public std::exception
 		{
 			public:
 				virtual const char		*what(void) const throw();

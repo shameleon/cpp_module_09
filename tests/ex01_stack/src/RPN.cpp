@@ -20,7 +20,7 @@ RPN::RPN(void)
 
 RPN::RPN(std::string &input_operation):_input(input_operation)
 {
-	this->_mstack = new std::deque<int>;
+	this->_mstack = new std::stack<int>;
 	return ;
 }
 
@@ -56,13 +56,12 @@ int					RPN::whichInputChar(char &c)
 
 void				RPN::popTwo_calculate_push(char &c)
 {
-
 	if (this->_mstack->size() < 2)
-		throw (RPN::OperandsMissingException());
-	long 	operand1 = this->_mstack->back();
-	this->_mstack->pop_back();
-	long 	operand2 = this->_mstack->back();
-	this->_mstack->pop_back();
+		throw (RPN::RPNErrorException());
+	int 	operand1 = this->_mstack->top();
+	this->_mstack->pop();
+	int 	operand2 = this->_mstack->top();
+	this->_mstack->pop();
 	switch (static_cast< int >(c))
 	{
 	case MULTIPLY:
@@ -78,16 +77,12 @@ void				RPN::popTwo_calculate_push(char &c)
 		if (operand1)
 			operand2 /= operand1;
 		else
-			throw (RPN::DivByZeroException());
+			throw (RPN::RPNErrorException());
 		break;
 	default:
 		break;
 	}
-	if (operand2 >= static_cast<long>(std::numeric_limits<int>::min())
-		&& operand2 <= static_cast<long>(std::numeric_limits<int>::max()))
-		this->_mstack->push_back(static_cast<int>(operand2));
-	else
-		throw (RPN::IntOverflowException());
+	this->_mstack->push(operand2);
 	return ;
 }
 
@@ -97,65 +92,35 @@ operator token => pop two calculate the push result
  */
 void				RPN::calculator(void)
 {
-	//is_negative = false;
-	std::string::iterator		it;
+	bool	can_be_pushed = true;
 
-	for (it = this->_input.begin() ; it < this->_input.end(); ++it)
+	for (unsigned long i = 0; i < this->_input.size(); i++)
 	{
-		switch (whichInputChar(*it))
+		switch (whichInputChar(this->_input[i]))
 		{
 		case IS_SPACER:
-			//can_be_pushed = true;
+			can_be_pushed = true;
 			break;
 		case IS_DIGIT:
-			//if (can_be_pushed)
-			this->_mstack->push_back(static_cast<int>(*it - '0'));
-			//else
-			//	throw (RPN::RPNErrorException());
-			//can_be_pushed = false;
+			if (can_be_pushed)
+				this->_mstack->push((this->_input[i]) - '0');
+			else
+				throw (RPN::RPNErrorException());
+			can_be_pushed = false;
 			break;
 		case IS_OPERATOR:
-			this->popTwo_calculate_push(*it);
+			this->popTwo_calculate_push(this->_input[i]);
 			break;
 		default:
-			throw (RPN::InvalidCharacterException());
+			throw (RPN::RPNErrorException());
 			break;
 		}
 	}
 	if (this->_mstack->size() == 1)
-		std::cout << COL_BGRN << this->_mstack->back() << COL_RES << std::endl;
+		std::cout << COL_BGRN << this->_mstack->top() << COL_RES << std::endl;
 	else
-		throw (RPN::OperatorsMissingException());
+		throw (RPN::RPNErrorException());
 	return ;
 }
 
-const char				*RPN::RPNErrorException::what(void) const throw()
-{
-	return ("Error");
-}
-
-const char				*RPN::InvalidCharacterException::what(void) const throw()
-{
-	return ("Error : invalid character(s).");
-}
-
-const char				*RPN::OperatorsMissingException::what(void) const throw()
-{
-	return ("Error : missing operator(s).");
-}
-
-const char				*RPN::OperandsMissingException::what(void) const throw()
-{
-	return ("Error : missing operand(s).");
-}
-
-const char				*RPN::DivByZeroException::what(void) const throw()
-{
-	return ("Error : Division by zero.");
-}
-
-const char				*RPN::IntOverflowException::what(void) const throw()
-{
-	return ("Error : integer overflow");
-}
 

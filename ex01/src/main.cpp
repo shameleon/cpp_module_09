@@ -13,7 +13,7 @@
 #include "../inc/RPN.hpp"
 
 /* *********************** */
-/*  Ex01  RNP              */
+/*  Ex01  RPN              */
 /* *********************** */
 
 int					main(int argc, char **argv)
@@ -29,7 +29,7 @@ int					main(int argc, char **argv)
 			{
 				to_stack.calculator();
 			}
-			catch(const RPN::RPNErrorException  &e)
+			catch(const std::exception &e)
 			{
 				std::cerr << COL_BRED << e.what() << COL_RES << std::endl;
 				
@@ -62,7 +62,7 @@ On est sense l'accepter avec le / et le + qui se suivent a la fin ?
 
 6- int overflow => switch to double ? throw exception ?
 
-7- change stack to deque to use iterators
+7- changed stack to deque to use iterators
 "et techniquement stack n'est pas un container mais un adaptateur de container ; )
 ds les prerequis des containers il faut des iterators"
 
