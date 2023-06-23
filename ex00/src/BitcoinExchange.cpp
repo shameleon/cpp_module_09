@@ -19,7 +19,7 @@ BitcoinExchange::BitcoinExchange(void)
 	return ;
 }
 
-BitcoinExchange::BitcoinExchange(BitcoinExchange &other)
+BitcoinExchange::BitcoinExchange(BitcoinExchange const &other)
 {
 	*this = other;
 	return ;
@@ -33,7 +33,7 @@ BitcoinExchange::~BitcoinExchange(void)
 	return ;
 }
 
-BitcoinExchange				&BitcoinExchange::operator=(BitcoinExchange &rhs)
+BitcoinExchange				&BitcoinExchange::operator=(BitcoinExchange const &rhs)
 {
 	//(static_cast< void >(rhs));
 	if (this->_btc_db)
@@ -43,18 +43,19 @@ BitcoinExchange				&BitcoinExchange::operator=(BitcoinExchange &rhs)
 	return *this;
 }
 
-std::map<int, double>		*BitcoinExchange::getBtcDatabase(void)
+std::map<int, double>		*BitcoinExchange::getBtcDatabase(void) const
 {
     return this->_btc_db;
 }
 
+/* yyyymmdd format. int from 20090101 to 20231231 */
 bool						BitcoinExchange::checkDate(int const date)
 {
 	int		yy = date / 10000;
 	int		mm = (date - yy * 10000) / 100;
 	int		dd = date - yy * 10000 - mm *100;
 
-	if ( yy < 2009 || yy > 2030 || mm < 1 || mm > 12 || dd < 1 || dd > 31)
+	if ( yy < 2009 || yy > LATEST_YEAR || mm < 1 || mm > 12 || dd < 1 || dd > 31)
 		return false;
 	if ( mm == 2 && ((yy % 4 != 0 && dd > 28) || (yy % 4 == 0 && dd > 29)))
 		return false;
@@ -87,7 +88,6 @@ void				BitcoinExchange::showBtcMonetaryValue(int const &date, double const &ass
 			key--;
 	}
 }
-
 
 bool						BitcoinExchange::loadDataBase(void)
 {

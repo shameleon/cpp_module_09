@@ -16,7 +16,7 @@
 
 # define BITCOIN_DATABASE	"./cpp_09/data.csv"
 # define OLDEST_DATE		20090102
-# define SEARCH_DAYS 		15
+# define LATEST_YEAR		2023
 # define ASSET_MIN 			0
 # define ASSET_MAX 			1000
 
@@ -42,10 +42,10 @@ class BitcoinExchange
 	public:
 		BitcoinExchange(void);
 		~BitcoinExchange(void);
-		BitcoinExchange(BitcoinExchange &other);
+		BitcoinExchange(BitcoinExchange const &other);
 
-		BitcoinExchange					&operator=(BitcoinExchange &rhs);
-		std::map<int, double>			*getBtcDatabase(void);
+		BitcoinExchange					&operator=(BitcoinExchange const &rhs);
+		std::map<int, double>			*getBtcDatabase(void) const;
 		void							printDataBtc(bool full) const;
 		void							showMonetaryValues(std::string const &input_file);
 
