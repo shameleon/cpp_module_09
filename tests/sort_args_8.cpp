@@ -150,15 +150,15 @@ void	listSort(std::list<int> &lst)
 	std::list<int>					elements_to_sort;
 	
 	groupElementsBySortedPairs(lst, pairlst, ending_singleton);
-	//printPairedList(pairlst);
+	printPairedList(pairlst);
 	sortPairsByRightElement(sortlst, pairlst);
-	//printPairedList(sortlst);
+	printPairedList(sortlst);
 	pushRightElements(elements_to_sort, lst, sortlst);
 	if (ending_singleton.size())
 		elements_to_sort.push_back(ending_singleton.front());
 	//std::cout << "# # # # # # # # # # # # # # " << std::endl;
-	//printOneList(elements_to_sort, COL_GRN2);
-	//printOneList(lst, COL_VIOL);
+	printOneList(elements_to_sort, COL_GRN2);
+	printOneList(lst, COL_VIOL);
 	binarySearchInsert(elements_to_sort, lst);
 }
 

@@ -37,8 +37,8 @@ class PmergeMe
 
 
 		PmergeMe(void);
-		PmergeMe(PmergeMe &other);
-		PmergeMe				&operator=(PmergeMe &rhs);
+		PmergeMe(PmergeMe const &other);
+		PmergeMe				&operator=(PmergeMe const &rhs);
 
 		/* vector sorted with Ford-Johnson*/
 		int						binarySearch(int item, std::vector<int> &vec, int left, int right);
@@ -63,8 +63,8 @@ class PmergeMe
 		void					listSort(std::list<int> &lst);
 
 
-		void					printVector(std::string color);
-		void					printList(std::string color);
+		void					printVector(std::string color) const;
+		void					printList(std::string color) const;
 		void					timedSortVector(void);
 		void					timedSortList(void);
 
