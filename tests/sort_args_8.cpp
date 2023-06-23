@@ -66,20 +66,18 @@ int		binarySearch(int item, std::list<int> &lst, int left, int right)
 */
 void	binarySearchInsert(std::list<int> &elements_to_sort, std::list<int> &lst)
 {
-	// std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std::endl;
-	// printOneList(elements_to_sort, COL_GRN2);
-	// printOneList(lst, COL_VIOL);
+	std::cout << std::endl;
+	printOneList(elements_to_sort, COL_GRN2);
+	printOneList(lst, COL_VIOL);
 	if (elements_to_sort.size() == 0)
 		return;
 	std::list< int> ::iterator it = lst.begin();
-	//std::cout << *it << std::endl;
-	// it != lst.end() not needed max element is already at the end
-	//int	left = binarySearch(elements_to_sort.front(), lst, 0, lst.size() - 1);
-	//it = it + left;
-	while (elements_to_sort.front() > *it)
+	while (elements_to_sort.front() > *it && it != lst.end())
 		++it;
-	//std::cout << elements_to_sort.front() << " -> " << *it << std::endl;
-	lst.insert(it, elements_to_sort.front());
+	if (it == lst.end())
+		lst.push_back(elements_to_sort.front());
+	else
+		lst.insert(it, elements_to_sort.front());
 	elements_to_sort.erase(elements_to_sort.begin());
 	binarySearchInsert(elements_to_sort, lst);
 }

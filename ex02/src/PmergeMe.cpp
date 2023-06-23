@@ -156,7 +156,9 @@ void				PmergeMe::timedSort(void)
 	timedSortList();
 }
 
-/************** Vector merge-insert **********************************************/
+/* ******************************************************************************* */
+/* *************         Vector merge-insert       ******************************* */
+/* ******************************************************************************* */
 int		PmergeMe::binarySearch(int item, std::vector<int> &vec, int left, int right)
 {
 	if (right - left > THRESHOLD)
@@ -180,28 +182,34 @@ void				PmergeMe::binarySearchInsert(std::vector<int> &elements_to_sort)
 	std::vector< int> ::iterator it = this->_pvec->begin();
 	int	left = binarySearch(elements_to_sort.front(), *(this->_pvec), 0, static_cast<int>(this->_pvec->size()) - 1);
 	it = it + left;
-	while (elements_to_sort.front() > *it)
+	while (elements_to_sort.front() > *it && it != this->_pvec->end())
 		++it;
-	this->_pvec->insert(it, elements_to_sort.front());
+	if (it == this->_pvec->end())
+		this->_pvec->push_back(elements_to_sort.front());
+	else
+		this->_pvec->insert(it, elements_to_sort.front());
 	elements_to_sort.erase(elements_to_sort.begin());
 	binarySearchInsert(elements_to_sort);
 }
 
+/* removes each pair right element from sort_vec is placed back in vec in a ascending sorted manner*/
 void				PmergeMe::pushRightElements(std::vector<int> &elements_to_sort,
-							std::vector< std::pair<int, int> > &pairvec)
+							std::vector< std::pair<int, int> > &sortvec)
 {
-	std::vector< std::pair<int, int> >::iterator	it = pairvec.begin();
+	std::vector< std::pair<int, int> >::iterator	it = sortvec.begin();
 
 	this->_pvec->push_back(it->first);
 	this->_pvec->push_back(it->second);
 	it++;
-	for(; it != pairvec.end(); ++it)
+	for(; it != sortvec.end(); ++it)
 	{
 		elements_to_sort.push_back(it->first);
 		this->_pvec->push_back(it->second);
 	}
 }
 
+/* pair_vec pairs are ascendingly sorted by their right element
+and moved sort_vec vector */
 void				PmergeMe::sortPairsByRightElement(std::vector< std::pair<int, int> > &sortvec,
 								std::vector< std::pair<int, int> > &pairvec)
 {
@@ -258,21 +266,25 @@ void				PmergeMe::vecSort(void)
 	binarySearchInsert(elements_to_sort);
 }
 
-
-/************** List merge-insert **********************************************/
+/* ******************************************************************************* */
+/* *************         List merge-insert       ******************************* */
+/* ******************************************************************************* */
 
 /* no subcript overload for lists : Random access of elements not possible.
 	As list is implemented as a double liked-list,
-	access by traversing through with iterators 
+	access can be achieved by traversing through with iterators 
 */
 void				PmergeMe::binarySearchInsert(std::list<int> &elements_to_sort, std::list<int> &lst)
 {
 	if (elements_to_sort.size() == 0)
 		return;
 	std::list< int> ::iterator it = lst.begin();
-	while (elements_to_sort.front() > *it)
+	while (elements_to_sort.front() > *it && it != this->_plist->end())
 		++it;
-	lst.insert(it, elements_to_sort.front());
+	if (it == this->_plist->end())
+		lst.push_back(elements_to_sort.front());
+	else
+		lst.insert(it, elements_to_sort.front());
 	elements_to_sort.erase(elements_to_sort.begin());
 	binarySearchInsert(elements_to_sort, lst);
 }

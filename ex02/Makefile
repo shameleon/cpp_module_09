@@ -76,7 +76,7 @@ leaks: $(NAME)
 	leaks -atExit -- ./$(NAME)
 
 valgrind: $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all -s ./$(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all -s ./$(NAME) `shuf -i 1-3000 -n 3000 | tr "\n" " "`
 
 .PHONY : valgrind leaks re fclean clean 
 
