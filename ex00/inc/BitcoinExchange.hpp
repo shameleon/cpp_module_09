@@ -24,8 +24,8 @@
 # include <iostream>			// std::cout
 # include <iomanip>				// std::setiosflags std::setprecision
 # include <fstream>				// std::ifstream
-# include <limits>  			//  std::numeric_limits
-# include <stdexcept>			//  std::exception
+# include <limits>  			// std::numeric_limits
+# include <stdexcept>			// std::exception
 # include "colors.hpp"
 
 class BitcoinExchange
@@ -33,7 +33,6 @@ class BitcoinExchange
 	private:
 		std::map<int, double>			*_btc_db;
 		bool							_valid_db;
-		//std::string				_input;
 
 		bool							checkDate(int const date);
 		void							showBtcMonetaryValue(int const &date, double const &assets);
