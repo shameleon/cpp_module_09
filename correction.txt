@@ -1,0 +1,18 @@
+# 
+
+std::string			input_file = static_cast <std::string>(argv[1]);
+
+can be replaced with 
+
+std::string			input_file(argv[1]);
+
+
+# 
+processing time of a program
+
+https://cplusplus.com/reference/ctime/clock/
+
+
+ time(&now);  /* get current time; same as: now = time(NULL)  */
+ 
+https://cplusplus.com/reference/ctime/difftime/
