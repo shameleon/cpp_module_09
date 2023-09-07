@@ -25,7 +25,7 @@
 # define COL_AUB	"\e[38:5:104m"
 # define COL_ORANGE	"\e[38:5:214m"
 # define COL_VIOL   "\e[38:5:198m"
-# define COL_LRED  "\e[38:5:160m"
+# define COL_LRED   "\e[38:5:160m"
 # define COL_RES	"\e[0m"
 
 void	printOneVector(std::vector< int>  &vec, std::string color)
@@ -65,33 +65,33 @@ int		binarySearch(int item, std::vector<int> &vec, int left, int right)
 
 void	binarySearchInsert(std::vector<int> &elements_to_sort, std::vector<int> &vec)
 {
-	// std::cout << "_ _ _ _ _ _ _ _ _ _ _ _ _ _ " << std::endl;
-	// printOneVector(elements_to_sort, COL_GRN2);
-	// printOneVector(vec, COL_VIOL);
+	std::cout << std::endl;
+	printOneVector(elements_to_sort, COL_GRN2);
+	printOneVector(vec, COL_VIOL);
 	if (elements_to_sort.size() == 0)
 		return;
 	std::vector< int> ::iterator it = vec.begin();
-	//std::cout << *it << std::endl;
-	// it != vec.end() not needed max element is already at the end
 	int	left = binarySearch(elements_to_sort.front(), vec, 0, vec.size() - 1);
 	it = it + left;
-	while (elements_to_sort.front() > *it)
+	while (elements_to_sort.front() > *it && it != vec.end())
 		++it;
-	//std::cout << elements_to_sort.front() << " -> " << *it << std::endl;
-	vec.insert(it, elements_to_sort.front());
+	if (it == vec.end())
+		vec.push_back(elements_to_sort.front());
+	else
+		vec.insert(it, elements_to_sort.front());
 	elements_to_sort.erase(elements_to_sort.begin());
 	binarySearchInsert(elements_to_sort, vec);
 }
 
 void	pushRightElements(std::vector<int> &elements_to_sort, std::vector<int> &vec,
-								std::vector< std::pair<int, int> > &pairvec)
+								std::vector< std::pair<int, int> > &sortvec)
 {
-	std::vector< std::pair<int, int> >::iterator	it = pairvec.begin();
+	std::vector< std::pair<int, int> >::iterator	it = sortvec.begin();
 
 	vec.push_back(it->first);
 	vec.push_back(it->second);
 	it++;
-	for(; it != pairvec.end(); ++it)
+	for(; it != sortvec.end(); ++it)
 	{
 		elements_to_sort.push_back(it->first);
 		vec.push_back(it->second);
@@ -149,9 +149,9 @@ void	vecSort(std::vector<int> &vec)
 	std::vector<int>					elements_to_sort;
 	
 	groupElementsBySortedPairs(vec, pairvec, ending_singleton);
-	//printPairedVector(pairvec);
+	printPairedVector(pairvec);
 	sortPairsByRightElement(sortvec, pairvec);
-	//printPairedVector(sortvec);
+	printPairedVector(sortvec);
 	pushRightElements(elements_to_sort, vec, sortvec);
 	if (ending_singleton.size())
 		elements_to_sort.push_back(ending_singleton[0]);

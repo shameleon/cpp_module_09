@@ -43,14 +43,6 @@ int					main(int argc, char **argv)
 }
 
 /*
-issues:
-1- copy 
-2- vector fucntions take &vec as param
-3- delete throw exception in a exit function
-4- textfile of merge insert sort.
-
-./PmergeMe `shuf -i 1-3000 -n 3000 | tr "\n" " "`
-
 Subject
 The name of the program is PmergeMe.
 • Your program must be able to use a positive integer sequence as argument.
@@ -64,4 +56,5 @@ least 3000 different integers.
 It is strongly advised to implement your algorithm for each container
 and thus to avoid using a generic function.
 
+./PmergeMe `shuf -i 1-3000 -n 3000 | tr "\n" " "`
 */

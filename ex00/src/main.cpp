@@ -20,49 +20,31 @@ int					main(int argc, char **argv)
 {
 	switch (argc)
 	{
-	case 1:
-		std::cout << "Argument missing : ./btc filename " << std::endl;
-		return 0;
-	case 2:
-		try
-		{
-			std::string			input_file = static_cast <std::string>(argv[1]);
-			BitcoinExchange		mbtc;
+		case 1:
+			std::cout << COL_LRED << "Argument missing : ./btc filename " << COL_RES << std::endl;
+			return 1;
+		case 2:
+			try
+			{
+				std::string			input_file = static_cast <std::string>(argv[1]);
+				BitcoinExchange		mbtc;
 
-			//mbtc.printDataBtc(false);
-			mbtc.monetaryValue(input_file);			
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << e.what() << '\n';
-		}
-		break;
-	default:
-		std::cout << COL_AUB << "Error : too many arguments" << COL_RES << std::endl;
-		return 1;
+				mbtc.printDataBtc(0);
+				mbtc.showMonetaryValues(input_file);			
+			}
+			catch(const std::exception& e)
+			{
+				std::cerr << e.what() << '\n';
+			}
+			break;
+		default:
+			std::cout << COL_LRED << "Error : too many arguments" << COL_RES << std::endl;
+			return 1;
 	}
 	return 0;
 }
 
 /*
-Major issues
-
-1 - copy constructor and operator=
-0 + test a directory as argument, chmod00 : IOT instruction ...
-1 + valgrind leaks if cannot open file
-2 + bad input exception : cout the invalid date
-3 - handle a date after 2022-03-29 ( how to key max )
-4 - map <const int, double>
-5 - functions like checkDate
-6 - keys as strings - push pop  : use iterator on string 
-	https://cplusplus.com/reference/string/string/begin/
-7 - last DB date : as attribute 
-8 - recent or future date : output ?
-	get better return with SearchKey
-9 - asset is 1 to 1000 range : 2018-02-03 | 0
-A valid value must be either a float or a positive integer between 0 and 1000
-
-./btc ../cpp_09_tgz/input.txt 
 
 Subject :
 
@@ -96,4 +78,29 @@ Unique keys
     No two elements in the container can have equivalent keys.
 Allocator-aware
     The container uses an allocator object to dynamically handle its storage needs. 
+
+
+
+input.txt
+
+date | value
+2011-01-03 | 3
+2011-01-03 | 2
+2011-01-03 | 1
+2011-01-03 | 1.2
+2011-01-09 | 1
+2012-01-11 | -1
+2001-42-42
+2012-01-11 | 1
+2012-01-11 | 2147483648
+2008-12-14 | 1.42
+2022-12-14 | 3.21
+2018/02-03 | 1
+2018-02-30 | 1
+2018-02-03 | 0
+2018-02-03 | 1002
+2022-03-29 | 0.1
+2022-04-01 | 0.1
+2022-04-03 | 0.1
+
 */

@@ -46,7 +46,7 @@ DEPFLAGS	= -MMD -MP -MF $(DEP_DIR)$*.d
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(COL_CYA)
+	$(COL_ORANGE)
 	$(CXX) $(CXXFLAGS) $(CFLAGS) $(OBJ) -o $(NAME) 
 	$(COL_GRN)
 	@echo "./$(NAME) executable is ready !"
@@ -89,5 +89,5 @@ COL_YEL = @echo "\033[1;33m"
 COL_BLU = @echo "\033[1;34m"
 COL_PUR = @echo "\033[1;35m"
 COL_CYA = @echo "\033[1;36m"
-COL_ORANGE = @echo "\033[38;5;255;165;0m"
+COL_ORANGE = @echo "\033[1;38:5:214m"
 COL_RESET = @echo "\033[0m"

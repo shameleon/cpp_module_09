@@ -27,10 +27,7 @@
 # define COL_AUB	"\e[38:5:104m"
 # define COL_ORANGE	"\e[38:5:214m"
 # define COL_VIOL   "\e[38:5:198m"
-# define COL_LRED  "\e[38:5:160m"
+# define COL_LRED   "\e[38:5:160m"
 # define COL_RES	"\e[0m"
 
 #endif
-
-/* 
-*/

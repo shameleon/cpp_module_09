@@ -2,7 +2,7 @@
 
 ## ex 00 : Bitcoin
 
-A `std::map` is a container that stores key-value pairs, where each key maps to a unique value.
+`std::map` container stores key-value pairs.
 
 ![map to file](https://marketsplash.com/tutorials/cpp/cplusplus-map-to-file/)
 

@@ -14,17 +14,18 @@
 #ifndef BITCOINEXCHANGE_HPP
 # define BITCOINEXCHANGE_HPP
 
-# define BITCOIN_DATABASE "../cpp_09_tgz/data.csv"
-# define OLDEST_DATE 20090102
-# define ASSET_MAX 1000
+# define BITCOIN_DATABASE	"./cpp_09/data.csv"
+# define OLDEST_DATE		20090102
+# define LATEST_YEAR		2023
+# define ASSET_MIN 			0
+# define ASSET_MAX 			1000
 
-# include <map>
-# include <iterator>
+# include <map>					// std::map
 # include <iostream>			// std::cout
 # include <iomanip>				// std::setiosflags std::setprecision
 # include <fstream>				// std::ifstream
-# include <limits>  			//  std::numeric_limits
-# include <stdexcept>			//  std::exception
+# include <limits>  			// std::numeric_limits
+# include <stdexcept>			// std::exception
 # include "colors.hpp"
 
 class BitcoinExchange
@@ -32,22 +33,20 @@ class BitcoinExchange
 	private:
 		std::map<int, double>			*_btc_db;
 		bool							_valid_db;
-		//std::string				_input;
-
-		BitcoinExchange(BitcoinExchange &other);
-		BitcoinExchange					&operator=(BitcoinExchange &rhs);
 
 		bool							checkDate(int const date);
+		void							showBtcMonetaryValue(int const &date, double const &assets);
 		bool							loadDataBase(void);
-		double							searchKey(int const &date, double const &assets);
-		
+
 	public:
 		BitcoinExchange(void);
 		~BitcoinExchange(void);
+		BitcoinExchange(BitcoinExchange const &other);
 
-		std::map<int, double>  			&getDatabase(void) const;
+		BitcoinExchange					&operator=(BitcoinExchange const &rhs);
+		std::map<int, double>			*getBtcDatabase(void) const;
 		void							printDataBtc(bool full) const;
-		void							monetaryValue(std::string const &input_file);
+		void							showMonetaryValues(std::string const &input_file);
 
 		class		InvalidFileException : public std::exception
 		{
