@@ -1,14 +1,48 @@
 # cpp_module_09
 
-## ex 00 : Bitcoin
+Validated in Jun 2023 with Grade 100 and one ```outstanding work``` rating.
 
-`std::map` container stores key-value pairs.
+_cpp_module_09_ is the 10th and last module of 42 school C++ piscine.
+It emphasizes on the use of `containers` and `iterators`. 
+Each container type must be used **only once** to solve 3 independent problems.
 
-![map to file](https://marketsplash.com/tutorials/cpp/cplusplus-map-to-file/)
+||problem| solution|
+|---|---|---|
+|ex00| [Bitcoin](./ex00) |`std::map` container to store key-value pairs|
+|ex01| [RPN calculator](./ex01)|`std::deque` container to stack numbers|
+|ex02| [PmergeMe](.ex/02)|`std::vec` and `std:list` to sort number sequences|
 
-## ex 01 : RPN calculator
+## ex00 • Bitcoin
 
-## ex 02 : PmergeMe
+A file containing **Bitcoin** price over time, has to be read, parsed and stored in a `database`.
+The `date` format has to be adapted for sorting. I chose to convert dates to an integer fomat `YYYYMMDD` instead of using std:strings.
+The `std::map` container was found to be very suitable for a database sorted in a chronological manner, associating each date to the corresponding bitcoin value,  
+Indeed, The C++ `std::map` is a **sorted associative container** that contains key-value pairs.
+[map to file](https://marketsplash.com/tutorials/cpp/cplusplus-map-to-file/)
+
+In a second time, another file has to be read, providing a date and an amount of bitcoins.
+The `monetary value` for that date:amount pair has to be found. 
+`Exceptions` are thrown with explict `error messages` if there is any problem either with the date or the bitcoin amount.
+Ultimately, bitcoin value at a certain date is calculated based on the most recent bitcoin value in the database.
+
+## ex01 • RPN calculator
+
+A string sequence of single-digit numbers and arithmetic operations are provided as a unique argument to **RPN** executable.
+
+```./RPN "2 4 + 1 - 5 *"```
+
+The argument string is parsed from left to right. 
+If a digit is found it is `pushed` as an `int` to a `stack`. 
+If a `operation` is found. Two numbers are `popped` from the stack and serve as operands for the operation.
+The result is `pushed`, thus being at the top of the stack.
+The final result is printed on stdout only if there is only one remaining number at the end of the argument parsing.
+
+## ex02 • PmergeMe
+
+PMergeMe is an array sorting problem. a sequence of positive integers is provided as arguments.
+The sequence are to be placed
+PMergeme must sort the sequence with the `Ford-Johnson Merge-insert algorithm`.
+Two types of containers have to be compared, and the implementation of the sorting algorithm 
 
 ![insert sort](https://www.programiz.com/dsa/insertion-sort)
 
