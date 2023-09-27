@@ -1,4 +1,4 @@
-# 
+# 1
 
 std::string			input_file = static_cast <std::string>(argv[1]);
 
@@ -7,7 +7,8 @@ can be replaced with
 std::string			input_file(argv[1]);
 
 
-# 
+# 2
+
 processing time of a program
 
 https://cplusplus.com/reference/ctime/clock/

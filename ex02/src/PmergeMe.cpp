@@ -209,7 +209,7 @@ void				PmergeMe::pushRightElements(std::vector<int> &elements_to_sort,
 }
 
 /* pair_vec pairs are ascendingly sorted by their right element
-and moved sort_vec vector */
+and moved to sort_vec vector */
 void				PmergeMe::sortPairsByRightElement(std::vector< std::pair<int, int> > &sortvec,
 								std::vector< std::pair<int, int> > &pairvec)
 {

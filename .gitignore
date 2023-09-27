@@ -1,7 +1,11 @@
 
+
+.vscode/*
 .DS_Store
+
 # Prerequisites
 *.d
+
 # executables
 RPN
 
